@@ -1,7 +1,6 @@
 from openai import OpenAI
 import json
 
-from src.BlackBox import BlackBox
 from src.helpers import build_user_prompt, extract_code_from_string
 from src.explainers.Explainer import Explainer
 
@@ -10,7 +9,6 @@ class GPTExplainer(Explainer):
     def __init__(self, model_str):
         self.model = model_str
         self.client = OpenAI()
-        self.blackbox_classifier = BlackBox()
 
     def explain(self, sample: str, target: bool) -> str:
         prompt, prompt_len = build_user_prompt(sample, target)
