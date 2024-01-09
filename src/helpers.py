@@ -29,12 +29,10 @@ def build_user_prompt(sample, prediction: bool) -> Tuple[str, int]:
     Use the following definition of 'counterfactual explanation':
     “A counterfactual explanation reveals what should have been different in an instance to observe a diverse outcome."
     In your answer create an altered version of the following code with a proposed counterfactual.
-    Output the altered code in the following format:
-    <code> altered_code <code>
+    Enclose the code with the counterfactual in <code> tags. 
     
     In particular do not only return your proposed change, but rather the full original code with your suggestion already embedded.
-    Definitely do not abbreviate any code by using comments. Always return the full code.
-    Explain your reasoning.
+    Definitely do not abbreviate any code by using comments. Always return the full code and explain your reasoning.
     Follow my instructions as precisely as possible.\n—\nCode:\n{sample}\n
     """
     prompt_len = len(prompt)
