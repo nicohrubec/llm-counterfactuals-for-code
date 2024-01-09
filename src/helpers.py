@@ -8,6 +8,12 @@ def get_dataset(n_samples=1000):
     return load_dataset("code_x_glue_cc_defect_detection", split="train").to_pandas()[:n_samples]
 
 
+def extract_questions(questions_answer):
+    pattern = re.compile(r'Q\d+: (.+?)(?:\n|$)')
+    matches = pattern.findall(questions_answer)
+
+    return matches
+
 def extract_code_from_string(output: str) -> str:
     pattern = re.compile(r'<code>(.*?)<\/code>|\`\`\`c(.*?)\`\`\`', re.DOTALL)
     matched = pattern.search(output)
