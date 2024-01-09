@@ -22,10 +22,10 @@ def extract_code_from_string(output: str) -> str:
     return matched.group(1) if matched.group(1) else matched.group(2) if matched.group(2) else None
 
 
-def build_user_prompt(sample, target: bool) -> Tuple[str, int]:
+def build_user_prompt(sample, prediction: bool) -> Tuple[str, int]:
     prompt = f"""
-    In the task of Code Defect Detection on the Devign dataset, a trained black-box classifier predicted the label {target} for the following code.
-    Generate a counterfactual explanation by making minimal changes to the code, so that the label changes from {target} to {not target}.
+    In the task of Code Defect Detection on the Devign dataset, a trained black-box classifier predicted the label {prediction} for the following code.
+    Generate a counterfactual explanation by making minimal changes to the code, so that the label changes from {prediction} to {not prediction}.
     Use the following definition of 'counterfactual explanation':
     “A counterfactual explanation reveals what should have been different in an instance to observe a diverse outcome."
     In your answer create an altered version of the following code with a proposed counterfactual.

@@ -11,7 +11,7 @@ class FlareCounterfactual:
 
     def get_counterfactual(self, sample, target):
         original_label, original_score = self.blackbox(sample)
-        candidate_counterfactual = self.explainer.explain(sample, target)
+        candidate_counterfactual = self.explainer.explain(sample, label2target[original_label])
         counterfactual_label, counterfactual_score = self.blackbox(candidate_counterfactual)
 
         print(f"The correct label is: {target}")

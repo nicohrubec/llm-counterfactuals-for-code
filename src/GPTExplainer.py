@@ -10,8 +10,8 @@ class GPTExplainer(Explainer):
         self.model = model_str
         self.client = OpenAI()
 
-    def explain(self, sample: str, target: bool) -> str:
-        prompt, prompt_len = build_user_prompt(sample, target)
+    def explain(self, sample: str, prediction: bool) -> str:
+        prompt, _ = build_user_prompt(sample, prediction)
 
         completion = self.client.chat.completions.create(
             model=self.model,

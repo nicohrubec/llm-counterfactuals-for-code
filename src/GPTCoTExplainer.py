@@ -18,8 +18,8 @@ class GPTCoTExplainer(Explainer):
 
         return completion.choices[0].message.content
 
-    def explain(self, sample: str, target: bool) -> str:
-        prompt, prompt_len = build_user_prompt(sample, target)
+    def explain(self, sample: str, prediction: bool) -> str:
+        prompt, _ = build_user_prompt(sample, prediction)
 
         messages = [
             {"role": "user",
