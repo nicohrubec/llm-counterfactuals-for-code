@@ -16,7 +16,7 @@ def extract_questions(questions_answer):
 
 
 def extract_code_from_string(output: str) -> str:
-    pattern = re.compile(r'<code>(.*?)<code>|\`\`\`c(.*?)\`\`\`', re.DOTALL)
+    pattern = re.compile(r'<code>(.*?)<\/?code>|\`\`\`c(.*?)\`\`\`', re.DOTALL)
     matched = pattern.search(output)
 
     return matched.group(1) if matched.group(1) else matched.group(2) if matched.group(2) else None
