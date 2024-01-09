@@ -24,7 +24,7 @@ class GPTCoTExplainer(Explainer):
         messages = [
             {"role": "user",
              "content": f"Which are three questions Q1, Q2, and Q3 whose answers would be most helpful to solve the following problem:\n {prompt}\n"
-                        f"Only ask questions that can be answered by looking at the given code."}
+                        f"Only ask questions that can be answered by looking at the given code. In particular you cannot ask about the blackbox-classifier."}
         ]
         answer_food_for_thought_questions = self.ask_gpt(messages)
         q1, q2, q3 = extract_questions(answer_food_for_thought_questions)
