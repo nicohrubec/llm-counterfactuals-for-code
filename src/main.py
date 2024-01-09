@@ -1,6 +1,6 @@
-from src.explainers.GPTExplainer import GPTExplainer
-from src.FlareCounterfactual import FlareCounterfactual
-from src.helpers import get_dataset
+from GPTExplainer import GPTExplainer
+from FlareCounterfactual import FlareCounterfactual
+from helpers import get_dataset
 
 if __name__ == '__main__':
     dataset = get_dataset()

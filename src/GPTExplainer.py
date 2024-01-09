@@ -1,8 +1,8 @@
 from openai import OpenAI
 import json
 
-from src.helpers import build_user_prompt, extract_code_from_string
-from src.explainers.Explainer import Explainer
+from helpers import build_user_prompt, extract_code_from_string
+from Explainer import Explainer
 
 
 class GPTExplainer(Explainer):

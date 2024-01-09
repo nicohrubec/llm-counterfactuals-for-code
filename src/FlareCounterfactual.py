@@ -1,5 +1,5 @@
-from src.BlackBox import BlackBox
-from src.explainers import Explainer
+from BlackBox import BlackBox
+from Explainer import Explainer
 
 label2target = {'LABEL_0': False, 'LABEL_1': True}
 
