@@ -19,9 +19,22 @@ class LLamaExplainer(Explainer):
             tokenizer=self.tokenizer
         )
 
-    def explain(self, sample: str, prediction: bool) -> str:
-        prompt, prompt_len = build_user_prompt(sample, prediction)
+    def build_prompt(self, prompt):
+        prompt = f"""
+<s>[INST] <<SYS>>
+{self.system_prompt}
+<</SYS>>
+
+{prompt} [/INST] 
+"""
+        prompt_len = len(prompt)
         prompt += " <code>"
+
+        return prompt, prompt_len
+
+    def explain(self, sample: str, prediction: bool) -> str:
+        prompt = build_user_prompt(sample, prediction)
+        prompt, prompt_len = self.build_prompt(prompt)
 
         sequences = self.llm(
             prompt,

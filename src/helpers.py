@@ -35,9 +35,8 @@ def build_user_prompt(sample, prediction: bool) -> Tuple[str, int]:
     Definitely do not abbreviate any code by using comments. Always return the full code and explain your reasoning.
     Follow my instructions as precisely as possible.\n—\nCode:\n{sample}\n
     """
-    prompt_len = len(prompt)
 
-    return prompt, prompt_len
+    return prompt
 
 
 # TODO: does it make sense to generate counterfactuals for samples that the model mispredicted in the first place?
