@@ -7,12 +7,12 @@ from Explainer import Explainer
 
 
 class LLamaExplainer(Explainer):
-    def __init__(self):
+    def __init__(self, model_str):
         token = os.environ.get("LLAMA_KEY")
-        self.tokenizer = AutoTokenizer.from_pretrained("meta-llama/Llama-2-7b-chat-hf", token=token)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_str, token=token)
         self.llm = pipeline(
             "text-generation",
-            model="meta-llama/Llama-2-7b-chat-hf",
+            model=model_str,
             torch_dtype=torch.bfloat16,
             device="cuda:0",
             token=token,
