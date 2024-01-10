@@ -15,6 +15,9 @@ class GPTExplainer(Explainer):
 
         completion = self.client.chat.completions.create(
             model=self.model,
+            temperature=0.4,
+            frequency_penalty=1.1,
+            top_p=1.0,
             messages=[
                 {"role": "system", "content": self.system_prompt},
                 {"role": "user", "content": prompt}
