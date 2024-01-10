@@ -28,34 +28,31 @@ class GPTCoTExplainer(Explainer):
         ]
         answer_food_for_thought_questions = self.ask_gpt(messages)
         q1, q2, q3 = extract_questions(answer_food_for_thought_questions)
-        print(answer_food_for_thought_questions)
 
         # ask first question
         # use instruction generating prompt in context because sometimes the original question is needed as context to answer the food for thought questions
         messages.append({"role": "assistant", "content": answer_food_for_thought_questions})
         messages.append({"role": "user", "content": q1})
         answer_q1 = self.ask_gpt(messages)
-        print(answer_q1)
 
         # ask second question
         # add answer to first question and second question to context
         messages.append({"role": "assistant", "content": answer_q1})
         messages.append({"role": "user", "content": q2})
         answer_q2 = self.ask_gpt(messages)
-        print(answer_q2)
 
         # ask third question
         messages.append({"role": "assistant", "content": answer_q2})
         messages.append({"role": "user", "content": q3})
         answer_q3 = self.ask_gpt(messages)
-        print(answer_q3)
 
         # ask actual question
         messages.append({"role": "assistant", "content": answer_q3})
         messages.append({"role": "user", "content": prompt})
         answer = self.ask_gpt(messages)
-        print(answer)
 
         explanation = extract_code_from_string(answer)
+
+        print(explanation)
 
         return explanation

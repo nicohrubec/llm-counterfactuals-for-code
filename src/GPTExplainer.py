@@ -24,4 +24,6 @@ class GPTExplainer(Explainer):
         response = json.loads(completion.model_dump_json())['choices'][0]['message']['content']
         explanation = extract_code_from_string(response)
 
+        print(explanation)
+
         return explanation

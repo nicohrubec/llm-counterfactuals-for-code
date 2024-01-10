@@ -46,7 +46,8 @@ class LLamaExplainer(Explainer):
         )
 
         response = sequences[0]['generated_text']
-        print(response[prompt_len:])
         explanation = extract_code_from_string(response[prompt_len:])
+
+        print(explanation)
 
         return explanation
