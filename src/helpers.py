@@ -7,7 +7,7 @@ def count_lines(text):
     return text.count('\n') + 1
 
 
-def get_dataset(n_samples=100, max_num_lines=50):
+def get_dataset(n_samples=100, max_num_lines=25):
     dataset = load_dataset("code_x_glue_cc_defect_detection", split="train").to_pandas()
     dataset['num_lines'] = dataset['func'].apply(count_lines)
     dataset = dataset[dataset.num_lines <= max_num_lines]
