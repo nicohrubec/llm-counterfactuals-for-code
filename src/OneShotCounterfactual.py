@@ -5,7 +5,7 @@ from SimilarityMetric import SimilarityMetric
 label2target = {'LABEL_0': False, 'LABEL_1': True}
 
 
-class FlareCounterfactual:
+class OneShotCounterfactual:
     def __init__(self, explainer: Explainer):
         self.blackbox = BlackBox()
         self.explainer = explainer
