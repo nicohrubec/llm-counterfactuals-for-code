@@ -2,7 +2,7 @@ import os
 import torch
 from transformers import pipeline, AutoTokenizer
 
-from helpers import build_user_prompt, extract_code_from_string
+from helpers import build_explainer_prompt, extract_code_from_string
 from Explainer import Explainer
 
 
@@ -33,7 +33,7 @@ class LLamaExplainer(Explainer):
         return prompt, prompt_len
 
     def explain(self, sample: str, prediction: bool) -> str:
-        prompt = build_user_prompt(sample, prediction)
+        prompt = build_explainer_prompt(sample, prediction)
         prompt, prompt_len = self.build_prompt(prompt)
 
         sequences = self.llm(

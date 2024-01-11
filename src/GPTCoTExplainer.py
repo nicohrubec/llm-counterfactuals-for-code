@@ -1,6 +1,6 @@
 from openai import OpenAI
 
-from helpers import build_user_prompt, extract_code_from_string, extract_questions
+from helpers import build_explainer_prompt, extract_code_from_string, extract_questions
 from Explainer import Explainer
 
 
@@ -19,7 +19,7 @@ class GPTCoTExplainer(Explainer):
         return completion.choices[0].message.content
 
     def explain(self, sample: str, prediction: bool) -> str:
-        prompt = build_user_prompt(sample, prediction)
+        prompt = build_explainer_prompt(sample, prediction)
 
         messages = [
             {"role": "user",
