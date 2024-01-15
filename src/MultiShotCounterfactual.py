@@ -49,14 +49,20 @@ class MultiShotCounterfactual:
             heapq.heappush(potential_counterfactuals, (counterfactual_score, potential_counterfactual, idx))
 
         parsed_counterfactual_program = parsed_sample.copy()
+        counterfactual_score = original_score
         while potential_counterfactuals:
             _, potential_counterfactual, idx = heapq.heappop(potential_counterfactuals)
 
             counterfactual_program = self.unmask_program(parsed_counterfactual_program, potential_counterfactual, idx)
+            prev_counterfactual_score = counterfactual_score
             counterfactual_label, counterfactual_score = self.blackbox(counterfactual_program)
 
-            parsed_counterfactual_program[idx] = potential_counterfactual
-            explanation.append((potential_counterfactual, idx))
+            # check if last step has brought us closer to a solution
+            if counterfactual_score < prev_counterfactual_score:
+                parsed_counterfactual_program[idx] = potential_counterfactual
+                explanation.append((potential_counterfactual, idx))
+            else:
+                counterfactual_score = prev_counterfactual_score
 
             if counterfactual_label != original_label:  # counterfactual found
                 similarity_score = float(self.similarity_score(sample, counterfactual_program)[0][0])
