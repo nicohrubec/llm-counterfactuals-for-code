@@ -23,7 +23,9 @@ if __name__ == '__main__':
 
     print("Multi shot results: ")
     counterfactual_generator.run_experiment(n_samples=1)
+    print()
     print("One shot results: ")
     counterfactual_generator_flare.run_experiment(n_samples=1)
+    print()
     print("Cot results:")
     counterfactual_generator_cot.run_experiment(n_samples=1)
