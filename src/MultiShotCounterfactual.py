@@ -10,6 +10,8 @@ label2target = {'LABEL_0': False, 'LABEL_1': True}
 
 class MultiShotCounterfactual:
     line_mask = "<MASK>"
+    one_shot_flipped = 0
+    num_candidates_produced = 0
 
     def __init__(self, explainer: Explainer, parser: Parser):
         self.blackbox = BlackBox()
@@ -25,6 +27,13 @@ class MultiShotCounterfactual:
     def unmask_program(self, program, replacement, idx):
         program[idx] = replacement
         return "\n".join(program)
+
+    def get_one_shot_flip_ratio(self):
+        return self.one_shot_flipped / self.num_candidates_produced
+
+    def update_one_shot_stats(self, flipped):
+        if flipped: self.one_shot_flipped += 1
+        self.num_candidates_produced += 1
 
     def get_counterfactual(self, sample, target):
         original_label, original_score = self.blackbox(sample)
@@ -43,9 +52,11 @@ class MultiShotCounterfactual:
             counterfactual_label, counterfactual_score = self.blackbox(unmasked_program)
 
             # high confident samples with different labels should be considered first
-            if counterfactual_label != original_label:
+            flipped = counterfactual_label != original_label
+            if flipped:
                 counterfactual_score = 1 - counterfactual_score
 
+            self.update_one_shot_stats(flipped)
             heapq.heappush(potential_counterfactuals, (counterfactual_score, potential_counterfactual, idx))
 
         parsed_counterfactual_program = parsed_sample.copy()
