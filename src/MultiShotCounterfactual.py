@@ -98,9 +98,9 @@ class MultiShotCounterfactual:
 
         return explanation, False, None
 
-    def run_experiment(self, n_samples=30):
+    def run_experiment(self, n_samples=30, max_num_lines=25):
         # TODO: all except the last line can be moved to a meta class CounterfactualGenerator.py
-        dataset = get_dataset()
+        dataset = get_dataset(max_num_lines=max_num_lines)
 
         counterfactuals = []
         flippeds = []

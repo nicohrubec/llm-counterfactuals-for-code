@@ -27,8 +27,8 @@ class OneShotCounterfactual:
 
         return candidate_counterfactual, original_label != counterfactual_label, similarity_score
 
-    def run_experiment(self, n_samples=30):
-        dataset = get_dataset()
+    def run_experiment(self, n_samples=30, max_num_lines=25):
+        dataset = get_dataset(max_num_lines=max_num_lines)
 
         counterfactuals = []
         flippeds = []
