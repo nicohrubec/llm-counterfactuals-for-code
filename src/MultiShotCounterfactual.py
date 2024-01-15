@@ -1,9 +1,11 @@
 import heapq
+import numpy as np
 
 from BlackBox import BlackBox
 from Explainer import Explainer
 from SimilarityMetric import SimilarityMetric
 from Parser import Parser
+from helpers import get_dataset
 
 label2target = {'LABEL_0': False, 'LABEL_1': True}
 
@@ -85,12 +87,41 @@ class MultiShotCounterfactual:
                     f"After applying the counterfactual the model predicted {label2target[counterfactual_label]} "
                     f"with a confidence of {counterfactual_score}.")
                 print(f"Similarity score: {similarity_score:.{4}f}")
+                print()
 
                 return explanation, True, similarity_score
 
         print(f"The correct label is: {target}")
         print(f"Originally the model predicted {label2target[original_label]} with a confidence of {original_score}.")
         print("No counterfactual was found!")
+        print()
 
         return explanation, False, None
 
+    def run_experiment(self, n_samples=30):
+        # TODO: all except the last line can be moved to a meta class CounterfactualGenerator.py
+        dataset = get_dataset()
+
+        counterfactuals = []
+        flippeds = []
+        similarities = []
+
+        for i in range(n_samples):
+            try:
+                print("Idx ", i)
+                sample = dataset.iloc[i].func
+                target = dataset.iloc[i].target
+
+                counterfactual, flipped, similarity = self.get_counterfactual(sample, target)
+                counterfactuals.append(counterfactual)
+                flippeds.append(flipped)
+                similarities.append(similarity)
+            except:
+                continue
+
+            similarities = [v for v in similarities if v is not None]
+
+            print("Experiment label flip score: ", sum(flippeds) / len(flippeds))
+            print("Experiment similarity score: ", sum(similarities) / len(similarities))
+            print("Experiment one shot flip score: ", self.get_one_shot_flip_ratio())
+            print()

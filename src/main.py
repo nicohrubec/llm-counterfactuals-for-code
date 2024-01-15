@@ -21,13 +21,9 @@ if __name__ == '__main__':
     gpt_cot_explainer = GPTCoTExplainer(model_str)
     counterfactual_generator_cot = OneShotCounterfactual(explainer=gpt_cot_explainer)
 
-    sample = dataset.iloc[0].func
-    target = dataset.iloc[0].target
-
     print("Multi shot results: ")
-    counterfactual_generator.get_counterfactual(sample, target)
+    counterfactual_generator.run_experiment(n_samples=1)
     print("One shot results: ")
-    counterfactual_generator_flare.get_counterfactual(sample, target)
+    counterfactual_generator_flare.run_experiment(n_samples=1)
     print("Cot results:")
-    counterfactual_generator_cot.get_counterfactual(sample, target)
-
+    counterfactual_generator_cot.run_experiment(n_samples=1)
