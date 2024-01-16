@@ -26,11 +26,11 @@ class CounterfactualGenerator:
             except:
                 continue
 
-            similarities = [v for v in similarities if v is not None]
-            counterfactual_similarities = [v for idx, v in enumerate(similarities) if flippeds[idx]]
+        similarities = [v for v in similarities if v is not None]
+        counterfactual_similarities = [v for idx, v in enumerate(similarities) if flippeds[idx]]
 
-            print("Experiment label flip score: ", sum(flippeds) / len(flippeds))
-            print("Experiment similarity score: ", sum(similarities) / len(similarities))
-            print("Experiment counterfactual similarity score: ",
-                  sum(counterfactual_similarities) / len(counterfactual_similarities))
+        print("Experiment label flip score: ", sum(flippeds) / len(flippeds))
+        print("Experiment similarity score: ", sum(similarities) / len(similarities))
+        print("Experiment counterfactual similarity score: ",
+              sum(counterfactual_similarities) / len(counterfactual_similarities))
 
