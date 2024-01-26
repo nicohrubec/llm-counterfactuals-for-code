@@ -1,5 +1,5 @@
-from GPTExplainer import GPTExplainer
-from GPTCoTExplainer import GPTCoTExplainer
+from SimpleGPTExplainer import SimpleGPTExplainer
+from CoTGPTExplainer import CoTGPTExplainer
 from OneShotCounterfactual import OneShotCounterfactual
 from MultiShotCounterfactual import MultiShotCounterfactual
 from MaskedGPTExplainer import MaskedGPTExplainer
@@ -15,10 +15,10 @@ if __name__ == '__main__':
     gpt_explainer = MaskedGPTExplainer(model_str)
     counterfactual_generator = MultiShotCounterfactual(gpt_explainer, line_parser)
 
-    gpt_explainer = GPTExplainer(model_str)
+    gpt_explainer = SimpleGPTExplainer(model_str)
     counterfactual_generator_flare = OneShotCounterfactual(explainer=gpt_explainer)
 
-    gpt_cot_explainer = GPTCoTExplainer(model_str)
+    gpt_cot_explainer = CoTGPTExplainer(model_str)
     counterfactual_generator_cot = OneShotCounterfactual(explainer=gpt_cot_explainer)
 
     print("Multi shot results: ")

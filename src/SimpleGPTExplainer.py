@@ -5,7 +5,7 @@ from helpers import build_explainer_prompt, extract_code_from_string
 from Explainer import Explainer
 
 
-class GPTExplainer(Explainer):
+class SimpleGPTExplainer(Explainer):
     def __init__(self, model_str):
         self.model = model_str
         self.client = OpenAI()

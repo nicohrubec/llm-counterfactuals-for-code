@@ -6,7 +6,7 @@ from helpers import build_explainer_prompt, extract_code_from_string
 from Explainer import Explainer
 
 
-class LLamaExplainer(Explainer):
+class SimpleLLamaExplainer(Explainer):
     def __init__(self, model_str):
         token = os.environ.get("LLAMA_KEY")
         self.tokenizer = AutoTokenizer.from_pretrained(model_str, token=token)

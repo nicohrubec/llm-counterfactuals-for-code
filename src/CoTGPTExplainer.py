@@ -5,7 +5,7 @@ from helpers import build_identify_words_prompt, build_explainer_with_identified
 from Explainer import Explainer
 
 
-class GPTCoTExplainer(Explainer):
+class CoTGPTExplainer(Explainer):
     def __init__(self, model_str):
         self.model = model_str
         self.client = OpenAI()
