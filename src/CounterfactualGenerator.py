@@ -1,8 +1,17 @@
-from helpers import get_dataset
 from typing import Tuple
+
+from helpers import get_dataset
+from BlackBox import BlackBox
+from Explainer import Explainer
+from SimilarityMetric import SimilarityMetric
 
 
 class CounterfactualGenerator:
+    def __init__(self, explainer: Explainer):
+        self.blackbox = BlackBox()
+        self.explainer = explainer
+        self.similarity_score = SimilarityMetric()
+
     def get_counterfactual(self, sample, target) -> Tuple[str, bool, float]:
         pass
 
@@ -29,8 +38,10 @@ class CounterfactualGenerator:
         similarities = [v for v in similarities if v is not None]
         counterfactual_similarities = [v for idx, v in enumerate(similarities) if flippeds[idx]]
 
-        print("Experiment label flip score: ", sum(flippeds) / len(flippeds))
-        print("Experiment similarity score: ", sum(similarities) / len(similarities))
-        print("Experiment counterfactual similarity score: ",
-              sum(counterfactual_similarities) / len(counterfactual_similarities))
-
+        try:
+            print("Experiment label flip score: ", sum(flippeds) / len(flippeds))
+            print("Experiment similarity score: ", sum(similarities) / len(similarities))
+            print("Experiment counterfactual similarity score: ",
+                  sum(counterfactual_similarities) / len(counterfactual_similarities))
+        except ZeroDivisionError:
+            print("No counterfactuals were found in this experiment!")

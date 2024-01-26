@@ -1,8 +1,6 @@
 import heapq
 
-from BlackBox import BlackBox
 from Explainer import Explainer
-from SimilarityMetric import SimilarityMetric
 from Parser import Parser
 from CounterfactualGenerator import CounterfactualGenerator
 
@@ -15,9 +13,7 @@ class MultiShotCounterfactual(CounterfactualGenerator):
     num_candidates_produced = 0
 
     def __init__(self, explainer: Explainer, parser: Parser):
-        self.blackbox = BlackBox()
-        self.explainer = explainer
-        self.similarity_score = SimilarityMetric()
+        super().__init__(explainer)
         self.parser = parser
 
     def get_masked_program(self, split_program, idx):

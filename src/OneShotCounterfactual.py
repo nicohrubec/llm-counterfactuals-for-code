@@ -1,7 +1,4 @@
-from BlackBox import BlackBox
 from Explainer import Explainer
-from SimilarityMetric import SimilarityMetric
-from helpers import get_dataset
 from CounterfactualGenerator import CounterfactualGenerator
 
 label2target = {'LABEL_0': False, 'LABEL_1': True}
@@ -9,9 +6,7 @@ label2target = {'LABEL_0': False, 'LABEL_1': True}
 
 class OneShotCounterfactual(CounterfactualGenerator):
     def __init__(self, explainer: Explainer):
-        self.blackbox = BlackBox()
-        self.explainer = explainer
-        self.similarity_score = SimilarityMetric()
+        super().__init__(explainer)
 
     def get_counterfactual(self, sample, target):
         original_label, original_score = self.blackbox(sample)
