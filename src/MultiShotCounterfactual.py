@@ -1,4 +1,5 @@
 import heapq
+from typing import Tuple
 
 from Explainer import Explainer
 from Parser import Parser
@@ -32,12 +33,11 @@ class MultiShotCounterfactual(CounterfactualGenerator):
         if flipped: self.one_shot_flipped += 1
         self.num_candidates_produced += 1
 
-    def get_counterfactual(self, sample, target):
+    def get_counterfactual(self, sample, target) -> Tuple[str, bool, float]:
         original_label, original_score = self.blackbox(sample)
         parsed_sample = self.parser.parse(sample)
         potential_counterfactuals = []
         heapq.heapify(potential_counterfactuals)
-        explanation = []
 
         for idx, line in enumerate(parsed_sample):
             if not len(line.strip()) > 1:
@@ -68,7 +68,6 @@ class MultiShotCounterfactual(CounterfactualGenerator):
             # check if last step has brought us closer to a solution
             if counterfactual_score < prev_counterfactual_score:
                 parsed_counterfactual_program[idx] = potential_counterfactual
-                explanation.append((potential_counterfactual, idx))
             else:
                 counterfactual_score = prev_counterfactual_score
 
@@ -84,14 +83,14 @@ class MultiShotCounterfactual(CounterfactualGenerator):
                 print(f"Similarity score: {similarity_score:.{4}f}")
                 print()
 
-                return explanation, True, similarity_score
+                return counterfactual_program, True, similarity_score
 
         print(f"The correct label is: {target}")
         print(f"Originally the model predicted {label2target[original_label]} with a confidence of {original_score}.")
         print("No counterfactual was found!")
         print()
 
-        return explanation, False, None
+        return counterfactual_program, False, None
 
     def run_experiment(self, n_samples=30, max_num_lines=25):
         super().run_experiment(n_samples=n_samples, max_num_lines=max_num_lines)

@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from Explainer import Explainer
 from CounterfactualGenerator import CounterfactualGenerator
 
@@ -8,7 +10,7 @@ class OneShotCounterfactual(CounterfactualGenerator):
     def __init__(self, explainer: Explainer):
         super().__init__(explainer)
 
-    def get_counterfactual(self, sample, target):
+    def get_counterfactual(self, sample, target) -> Tuple[str, bool, float]:
         original_label, original_score = self.blackbox(sample)
         candidate_counterfactual = self.explainer.explain(sample, label2target[original_label])
         counterfactual_label, counterfactual_score = self.blackbox(candidate_counterfactual)

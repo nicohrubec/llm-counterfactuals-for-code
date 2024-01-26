@@ -13,7 +13,7 @@ class CounterfactualGenerator:
         self.similarity_score = SimilarityMetric()
 
     def get_counterfactual(self, sample, target) -> Tuple[str, bool, float]:
-        pass
+        raise NotImplementedError
 
     def run_experiment(self, n_samples=30, max_num_lines=25):
         dataset = get_dataset(max_num_lines=max_num_lines)
