@@ -1,6 +1,7 @@
 from openai import OpenAI
+import json
 
-from helpers import build_explainer_prompt, extract_code_from_string, extract_questions
+from helpers import build_identify_words_prompt, build_explainer_with_identified_words_prompt, extract_code_from_string
 from Explainer import Explainer
 
 
@@ -9,48 +10,46 @@ class GPTCoTExplainer(Explainer):
         self.model = model_str
         self.client = OpenAI()
 
-    def ask_gpt(self, messages):
-        messages = [{"role": "system", "content": self.system_prompt}] + messages
+    def ask_gpt(self, prompt):
+        messages = [
+            {"role": "system", "content": self.system_prompt}
+        ]
+
+        if isinstance(prompt, str):  # simple input prompt string
+            messages += [
+                {"role": "user", "content": prompt}
+            ]
+        else:
+            messages += prompt
+
         completion = self.client.chat.completions.create(
             model=self.model,
+            temperature=0.4,
+            frequency_penalty=1.1,
+            top_p=1.0,
             messages=messages
         )
 
-        return completion.choices[0].message.content
+        response = json.loads(completion.model_dump_json())['choices'][0]['message']['content']
+
+        return response
 
     def explain(self, sample: str, prediction: bool) -> str:
-        prompt = build_explainer_prompt(sample, prediction)
+        identify_words_prompt = build_identify_words_prompt(sample, prediction)
 
         messages = [
-            {"role": "user",
-             "content": f"Which are three diverse questions Q1, Q2, and Q3 whose answers would be most helpful to solve the following problem:\n {prompt}\n"
-                        f"Only ask questions that can be answered by looking at the given code. In particular you cannot ask about the blackbox-classifier."}
+            {"role": "user", "content": identify_words_prompt}
         ]
-        answer_food_for_thought_questions = self.ask_gpt(messages)
-        q1, q2, q3 = extract_questions(answer_food_for_thought_questions)
 
-        # ask first question
-        # use instruction generating prompt in context because sometimes the original question is needed as context to answer the food for thought questions
-        messages.append({"role": "assistant", "content": answer_food_for_thought_questions})
-        messages.append({"role": "user", "content": q1})
-        answer_q1 = self.ask_gpt(messages)
+        identified_words_response = self.ask_gpt(messages)
+        prompt = build_explainer_with_identified_words_prompt(prediction)
 
-        # ask second question
-        # add answer to first question and second question to context
-        messages.append({"role": "assistant", "content": answer_q1})
-        messages.append({"role": "user", "content": q2})
-        answer_q2 = self.ask_gpt(messages)
+        messages += [
+            {"role": "assistant", "content": identified_words_response},
+            {"role": "user", "content": prompt}
+        ]
 
-        # ask third question
-        messages.append({"role": "assistant", "content": answer_q2})
-        messages.append({"role": "user", "content": q3})
-        answer_q3 = self.ask_gpt(messages)
-
-        # ask actual question
-        messages.append({"role": "assistant", "content": answer_q3})
-        messages.append({"role": "user", "content": prompt})
         answer = self.ask_gpt(messages)
-
         explanation = extract_code_from_string(answer)
 
         print(explanation)
