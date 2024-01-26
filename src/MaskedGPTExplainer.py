@@ -1,7 +1,8 @@
 from openai import OpenAI
 import json
 
-from helpers import build_masked_prompt, extract_code_from_string
+from helpers import extract_code_from_string
+from src.prompt import build_masked_prompt
 from Explainer import Explainer
 
 

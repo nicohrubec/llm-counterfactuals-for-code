@@ -2,7 +2,8 @@ import os
 import torch
 from transformers import pipeline, AutoTokenizer
 
-from helpers import build_masked_prompt, extract_code_from_string
+from helpers import extract_code_from_string
+from src.prompt import build_masked_prompt, build_llama_prompt
 from Explainer import Explainer
 
 
@@ -19,22 +20,9 @@ class MaskedLLamaExplainer(Explainer):
             tokenizer=self.tokenizer
         )
 
-    def build_prompt(self, prompt):
-        prompt = f"""
-<s>[INST] <<SYS>>
-{self.system_prompt}
-<</SYS>>
-
-{prompt} [/INST] 
-"""
-        prompt_len = len(prompt)
-        prompt += " <code>"
-
-        return prompt, prompt_len
-
     def explain(self, sample: str, prediction: bool) -> str:
         prompt = build_masked_prompt(sample, prediction)
-        prompt, prompt_len = self.build_prompt(prompt)
+        prompt, prompt_len = build_llama_prompt(self.system_prompt, prompt)
 
         sequences = self.llm(
             prompt,
