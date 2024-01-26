@@ -1,31 +1,12 @@
-from openai import OpenAI
-import json
-
 from helpers import extract_code_from_string
 from src.prompt import build_explainer_prompt
-from Explainer import Explainer
+from GPTExplainer import GPTExplainer
 
 
-class SimpleGPTExplainer(Explainer):
-    def __init__(self, model_str):
-        self.model = model_str
-        self.client = OpenAI()
-
+class SimpleGPTExplainer(GPTExplainer):
     def explain(self, sample: str, prediction: bool) -> str:
         prompt = build_explainer_prompt(sample, prediction)
-
-        completion = self.client.chat.completions.create(
-            model=self.model,
-            temperature=0.4,
-            frequency_penalty=1.1,
-            top_p=1.0,
-            messages=[
-                {"role": "system", "content": self.system_prompt},
-                {"role": "user", "content": prompt}
-            ]
-        )
-
-        response = json.loads(completion.model_dump_json())['choices'][0]['message']['content']
+        response = self.ask_gpt(prompt)
         explanation = extract_code_from_string(response)
 
         print(explanation)
