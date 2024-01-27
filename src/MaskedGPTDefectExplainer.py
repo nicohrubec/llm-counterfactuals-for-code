@@ -3,7 +3,7 @@ from src.prompt import build_masked_prompt
 from GPTExplainer import GPTExplainer
 
 
-class MaskedGPTExplainer(GPTExplainer):
+class MaskedGPTDefectExplainer(GPTExplainer):
     def explain(self, sample: str, prediction: bool) -> str:
         prompt = build_masked_prompt(sample, prediction)
         response = self.ask_gpt(prompt)

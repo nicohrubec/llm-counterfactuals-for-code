@@ -3,7 +3,7 @@ from src.prompt import build_explainer_with_identified_words_prompt, build_ident
 from GPTExplainer import GPTExplainer
 
 
-class CoTGPTExplainer(GPTExplainer):
+class CoTGPTDefectExplainer(GPTExplainer):
     def explain(self, sample: str, prediction: bool) -> str:
         identify_words_prompt = build_identify_words_prompt(sample, prediction)
 

@@ -3,7 +3,7 @@ from src.prompt import build_explainer_prompt, build_llama_prompt
 from LLamaExplainer import LLamaExplainer
 
 
-class SimpleLLamaExplainer(LLamaExplainer):
+class SimpleLLamaDefectExplainer(LLamaExplainer):
     def explain(self, sample: str, prediction: bool) -> str:
         prompt = build_explainer_prompt(sample, prediction)
         prompt, prompt_len = build_llama_prompt(self.system_prompt, prompt)
