@@ -24,9 +24,10 @@ class CounterfactualGenerator:
 
         for i in range(n_samples):
             try:
-                print("Idx ", i)
-                sample = dataset.iloc[i].func
-                target = dataset.iloc[i].target
+                print("Iteration ", i + 1)
+                random_sample = dataset.sample(random_state=42)
+                sample = random_sample.iloc[0].func
+                target = random_sample.iloc[0].target
 
                 counterfactual, flipped, similarity = self.get_counterfactual(sample, target)
                 counterfactuals.append(counterfactual)
