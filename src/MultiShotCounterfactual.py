@@ -91,7 +91,3 @@ class MultiShotCounterfactual(CounterfactualGenerator):
         print()
 
         return counterfactual_program, False, None
-
-    def run_experiment(self, n_samples=30, max_num_lines=25):
-        super().run_experiment(n_samples=n_samples, max_num_lines=max_num_lines)
-        print("Experiment one shot flip score: ", self.get_one_shot_flip_ratio())

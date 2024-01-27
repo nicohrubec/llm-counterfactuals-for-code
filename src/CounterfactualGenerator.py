@@ -46,3 +46,11 @@ class CounterfactualGenerator:
                   sum(counterfactual_similarities) / len(counterfactual_similarities))
         except ZeroDivisionError:
             print("No counterfactuals were found in this experiment!")
+
+        # very hacky but needed to print the one shot flip ratio after experiments which is only defined for the
+        # MultiShotCounterfactual generator
+        # TODO: should be moved but not sure yet where to
+        try:
+            print("Experiment one shot flip score: ", self.get_one_shot_flip_ratio())
+        except AttributeError:
+            pass
