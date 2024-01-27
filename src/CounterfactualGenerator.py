@@ -8,7 +8,7 @@ from SimilarityMetric import SimilarityMetric
 
 class CounterfactualGenerator:
     def __init__(self, explainer: Explainer):
-        self.blackbox = BlackBox()
+        self.blackbox = BlackBox("uclanlp/plbart-c-cpp-defect-detection")
         self.explainer = explainer
         self.similarity_score = SimilarityMetric()
 
