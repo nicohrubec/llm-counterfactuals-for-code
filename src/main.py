@@ -5,6 +5,7 @@ from MultiShotCounterfactual import MultiShotCounterfactual
 from MaskedGPTDefectExplainer import MaskedGPTDefectExplainer
 from LineParser import LineParser
 from helpers import get_dataset
+from src.experiment import run_defect_experiment
 
 model_str = "gpt-3.5-turbo-1106"
 
@@ -22,10 +23,10 @@ if __name__ == '__main__':
     counterfactual_generator_cot = OneShotCounterfactual(explainer=gpt_cot_explainer)
 
     print("Multi shot results: ")
-    counterfactual_generator.run_experiment(n_samples=1)
+    run_defect_experiment(counterfactual_generator, n_samples=1)
     print()
     print("One shot results: ")
-    counterfactual_generator_flare.run_experiment(n_samples=1)
+    run_defect_experiment(counterfactual_generator_flare, n_samples=1)
     print()
     print("Cot results:")
-    counterfactual_generator_cot.run_experiment(n_samples=1)
+    run_defect_experiment(counterfactual_generator_cot, n_samples=1)
