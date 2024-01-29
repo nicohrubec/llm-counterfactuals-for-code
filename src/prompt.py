@@ -1,4 +1,4 @@
-def build_explainer_prompt(sample, prediction: bool) -> str:
+def build_defect_explainer_prompt(sample, prediction: bool) -> str:
     prompt = f"""
     In the task of Code Defect Detection on the Devign dataset, a trained black-box classifier predicted the label {prediction} for the following code.
     Generate a counterfactual explanation by making minimal changes to the code, so that the label changes from {prediction} to {not prediction}, 
@@ -23,7 +23,7 @@ def build_explainer_prompt(sample, prediction: bool) -> str:
     return prompt
 
 
-def build_masked_prompt(sample, prediction: str) -> str:
+def build_defect_masked_prompt(sample, prediction: str) -> str:
     prompt = f"""
     In the task of Code Defect Detection on the Devign dataset, a trained black-box classifier predicted the label {prediction} for the following code.
     One line of the original program was masked using the <MASK> token. 
@@ -44,7 +44,7 @@ def build_masked_prompt(sample, prediction: str) -> str:
     return prompt
 
 
-def build_explainer_with_identified_words_prompt(prediction: bool) -> str:
+def build_defect_explainer_with_identified_words_prompt(prediction: bool) -> str:
     prompt = f"""
     Generate a counterfactual explanation for the original text by ONLY changing a minimal set of the lines you identified,
     so that the label changes from {prediction} to {not prediction}, 
@@ -68,7 +68,7 @@ def build_explainer_with_identified_words_prompt(prediction: bool) -> str:
     return prompt
 
 
-def build_identify_words_prompt(sample, prediction: bool) -> str:
+def build_defect_identify_words_prompt(sample, prediction: bool) -> str:
     prompt = f"""
     In the task of Code Defect Detection on the Devign dataset, a trained black-box classifier predicted the label {prediction} for the following code. 
     Explain why the model predicted the label {prediction} by identifying lines in the input that caused the label.
