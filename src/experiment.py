@@ -1,6 +1,6 @@
 from CounterfactualGenerator import CounterfactualGenerator
 
-from src.helpers import get_dataset
+from helpers import get_dataset
 
 
 def run_defect_experiment(counterfactual_generator: CounterfactualGenerator, n_samples=30, max_num_lines=25):

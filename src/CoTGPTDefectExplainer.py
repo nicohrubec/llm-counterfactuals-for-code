@@ -1,5 +1,5 @@
 from helpers import extract_code_from_string
-from src.prompt import build_explainer_with_identified_words_prompt, build_identify_words_prompt
+from prompt import build_explainer_with_identified_words_prompt, build_identify_words_prompt
 from GPTExplainer import GPTExplainer
 
 

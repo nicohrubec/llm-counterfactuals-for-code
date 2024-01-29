@@ -1,5 +1,5 @@
 from helpers import extract_code_from_string
-from src.prompt import build_explainer_prompt
+from prompt import build_explainer_prompt
 from GPTExplainer import GPTExplainer
 
 

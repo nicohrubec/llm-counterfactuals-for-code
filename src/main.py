@@ -5,7 +5,7 @@ from MultiShotCounterfactual import MultiShotCounterfactual
 from MaskedGPTDefectExplainer import MaskedGPTDefectExplainer
 from LineParser import LineParser
 from helpers import get_dataset
-from src.experiment import run_defect_experiment
+from experiment import run_defect_experiment
 
 model_str = "gpt-3.5-turbo-1106"
 
