@@ -5,7 +5,7 @@ from GPTExplainer import GPTExplainer
 
 class CoTGPTDefectExplainer(GPTExplainer):
     def explain(self, sample, prediction: bool) -> str:
-        identify_words_prompt = build_identify_words_prompt(sample, prediction)
+        identify_words_prompt = build_identify_words_prompt(sample[0], prediction)
 
         messages = [
             {"role": "user", "content": identify_words_prompt}
