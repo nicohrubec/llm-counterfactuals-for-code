@@ -4,7 +4,7 @@ from GPTExplainer import GPTExplainer
 
 
 class SimpleGPTDefectExplainer(GPTExplainer):
-    def explain(self, sample, prediction: bool) -> str:
+    def explain(self, sample: str, prediction: bool) -> str:
         prompt = build_explainer_prompt(sample, prediction)
         response = self.ask_gpt(prompt)
         explanation = extract_code_from_string(response)
