@@ -1,5 +1,5 @@
 import heapq
-from typing import Tuple
+from typing import Tuple, List
 
 from Explainer import Explainer
 from Parser import Parser
@@ -33,9 +33,9 @@ class MultiShotCounterfactual(CounterfactualGenerator):
         if flipped: self.one_shot_flipped += 1
         self.num_candidates_produced += 1
 
-    def get_counterfactual(self, sample, target) -> Tuple[str, bool, float]:
+    def get_counterfactual(self, sample: List[str], target: bool) -> Tuple[str, bool, float]:
         original_label, original_score = self.blackbox(sample)
-        parsed_sample = self.parser.parse(sample)
+        parsed_sample = self.parser.parse(sample[0])
         potential_counterfactuals = []
         heapq.heapify(potential_counterfactuals)
 

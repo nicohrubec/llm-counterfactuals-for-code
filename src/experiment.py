@@ -17,7 +17,7 @@ def run_defect_experiment(counterfactual_generator: CounterfactualGenerator, n_s
             sample = random_sample.iloc[0].func
             target = random_sample.iloc[0].target
 
-            counterfactual, flipped, similarity = counterfactual_generator.get_counterfactual(sample, target)
+            counterfactual, flipped, similarity = counterfactual_generator.get_counterfactual([sample], target)
             counterfactuals.append(counterfactual)
             flippeds.append(flipped)
             similarities.append(similarity)

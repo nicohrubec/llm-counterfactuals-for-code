@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, List
 
 from BlackBox import BlackBox
 from Explainer import Explainer
@@ -11,5 +11,5 @@ class CounterfactualGenerator:
         self.explainer = explainer
         self.similarity_score = SimilarityMetric()
 
-    def get_counterfactual(self, sample, target) -> Tuple[str, bool, float]:
+    def get_counterfactual(self, sample: List[str], target: bool) -> Tuple[str, bool, float]:
         raise NotImplementedError

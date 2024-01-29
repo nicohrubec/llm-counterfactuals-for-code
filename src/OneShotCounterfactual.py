@@ -1,13 +1,12 @@
-from typing import Tuple
+from typing import Tuple, List
 
-from Explainer import Explainer
 from CounterfactualGenerator import CounterfactualGenerator
 
 label2target = {'LABEL_0': False, 'LABEL_1': True}
 
 
 class OneShotCounterfactual(CounterfactualGenerator):
-    def get_counterfactual(self, sample, target) -> Tuple[str, bool, float]:
+    def get_counterfactual(self, sample: List[str], target: bool) -> Tuple[str, bool, float]:
         original_label, original_score = self.blackbox(sample)
         candidate_counterfactual = self.explainer.explain(sample, label2target[original_label])
         counterfactual_label, counterfactual_score = self.blackbox(candidate_counterfactual)
