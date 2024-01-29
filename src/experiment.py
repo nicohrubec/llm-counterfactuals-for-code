@@ -4,7 +4,7 @@ from helpers import get_dataset
 
 
 def run_defect_experiment(counterfactual_generator: CounterfactualGenerator, n_samples=30, max_num_lines=25):
-    dataset = get_dataset(max_num_lines=max_num_lines)
+    dataset = get_dataset("code_x_glue_cc_defect_detection", n_samples=n_samples, max_num_lines=max_num_lines)
 
     counterfactuals = []
     flippeds = []

@@ -4,14 +4,11 @@ from OneShotCounterfactual import OneShotCounterfactual
 from MultiShotCounterfactual import MultiShotCounterfactual
 from MaskedGPTDefectExplainer import MaskedGPTDefectExplainer
 from LineParser import LineParser
-from helpers import get_dataset
 from experiment import run_defect_experiment
 
 model_str = "gpt-3.5-turbo-1106"
 
 if __name__ == '__main__':
-    dataset = get_dataset()
-
     line_parser = LineParser()
     gpt_explainer = MaskedGPTDefectExplainer(model_str)
     counterfactual_generator = MultiShotCounterfactual(gpt_explainer, line_parser)
