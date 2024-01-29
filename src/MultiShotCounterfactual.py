@@ -13,8 +13,8 @@ class MultiShotCounterfactual(CounterfactualGenerator):
     one_shot_flipped = 0
     num_candidates_produced = 0
 
-    def __init__(self, explainer: Explainer, parser: Parser):
-        super().__init__(explainer)
+    def __init__(self, explainer: Explainer, blackbox_name: str, parser: Parser):
+        super().__init__(explainer, blackbox_name)
         self.parser = parser
 
     def get_masked_program(self, split_program, idx):

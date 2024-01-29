@@ -1,29 +1,39 @@
 from SimpleGPTDefectExplainer import SimpleGPTDefectExplainer
+from SimpleGPTCloneExplainer import SimpleGPTCloneExplainer
 from CoTGPTDefectExplainer import CoTGPTDefectExplainer
 from OneShotCounterfactual import OneShotCounterfactual
 from MultiShotCounterfactual import MultiShotCounterfactual
 from MaskedGPTDefectExplainer import MaskedGPTDefectExplainer
 from LineParser import LineParser
-from src.DefectExperimentRunner import DefectExperimentRunner
+from DefectExperimentRunner import DefectExperimentRunner
+from CloneExperimentRunner import CloneExperimentRunner
 
 model_str = "gpt-3.5-turbo-1106"
+defect_blackbox_str = "uclanlp/plbart-c-cpp-defect-detection"
+clone_blackbox_str = "uclanlp/plbart-java-clone-detection"
 
 if __name__ == '__main__':
+    gpt_explainer = SimpleGPTCloneExplainer(model_str)
+    clone_single_shot_counterfactual_generator = OneShotCounterfactual(gpt_explainer, clone_blackbox_str)
+
     line_parser = LineParser()
     gpt_explainer = MaskedGPTDefectExplainer(model_str)
-    counterfactual_generator = MultiShotCounterfactual(gpt_explainer, line_parser)
+    defect_multi_shot_counterfactual_generator = MultiShotCounterfactual(gpt_explainer, defect_blackbox_str, line_parser)
 
     gpt_explainer = SimpleGPTDefectExplainer(model_str)
-    counterfactual_generator_flare = OneShotCounterfactual(explainer=gpt_explainer)
+    defect_single_shot_counterfactual_generator = OneShotCounterfactual(gpt_explainer, defect_blackbox_str)
 
     gpt_cot_explainer = CoTGPTDefectExplainer(model_str)
-    counterfactual_generator_cot = OneShotCounterfactual(explainer=gpt_cot_explainer)
+    defect_single_shot_cot_counterfactual_generator = OneShotCounterfactual(gpt_cot_explainer, defect_blackbox_str)
 
-    print("Multi shot results: ")
-    DefectExperimentRunner(counterfactual_generator).run_experiment(n_samples=1)
+    print("Clone One shot results: ")
+    CloneExperimentRunner(clone_single_shot_counterfactual_generator).run_experiment(n_samples=1)
     print()
-    print("One shot results: ")
-    DefectExperimentRunner(counterfactual_generator_flare).run_experiment(n_samples=1)
+    print("Defect Multi shot results: ")
+    DefectExperimentRunner(defect_multi_shot_counterfactual_generator).run_experiment(n_samples=1)
     print()
-    print("Cot results:")
-    DefectExperimentRunner(counterfactual_generator_cot).run_experiment(n_samples=1)
+    print("Defect One shot results: ")
+    DefectExperimentRunner(defect_single_shot_counterfactual_generator).run_experiment(n_samples=1)
+    print()
+    print("Defect Cot results:")
+    DefectExperimentRunner(defect_single_shot_cot_counterfactual_generator).run_experiment(n_samples=1)

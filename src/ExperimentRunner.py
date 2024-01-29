@@ -1,4 +1,5 @@
 from CounterfactualGenerator import CounterfactualGenerator
+import traceback
 
 
 class ExperimentRunner:
@@ -28,6 +29,7 @@ class ExperimentRunner:
                 flippeds.append(flipped)
                 similarities.append(similarity)
             except:
+                traceback.print_exc()
                 continue
 
         similarities = [v for v in similarities if v is not None]
