@@ -13,9 +13,9 @@ def run_defect_experiment(counterfactual_generator: CounterfactualGenerator, n_s
     for i in range(n_samples):
         try:
             print("Iteration ", i + 1)
-            random_sample = dataset.sample(random_state=2024)
-            sample = random_sample.iloc[0].func
-            target = random_sample.iloc[0].target
+            # random_sample = dataset.sample(random_state=2024)
+            sample = dataset.iloc[i].func
+            target = dataset.iloc[i].target
 
             counterfactual, flipped, similarity = counterfactual_generator.get_counterfactual(sample, target)
             counterfactuals.append(counterfactual)
