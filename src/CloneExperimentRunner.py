@@ -9,7 +9,7 @@ class CloneExperimentRunner(ExperimentRunner):
 
     def get_sample(self, dataset, idx):
         # random_sample = dataset.sample(random_state=2024)
-        sample = "\n\n".join([dataset.iloc[idx].func1, dataset.iloc[idx].func2])
+        sample = "<s>" "</s> \n\n <s>".join([dataset.iloc[idx].func1, dataset.iloc[idx].func2]) + "</s>"
         target = dataset.iloc[idx].label
 
         return sample, target
