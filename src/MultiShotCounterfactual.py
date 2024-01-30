@@ -5,8 +5,6 @@ from Explainer import Explainer
 from Parser import Parser
 from CounterfactualGenerator import CounterfactualGenerator
 
-label2target = {'LABEL_0': False, 'LABEL_1': True}
-
 
 class MultiShotCounterfactual(CounterfactualGenerator):
     line_mask = "<MASK>"
@@ -44,7 +42,7 @@ class MultiShotCounterfactual(CounterfactualGenerator):
                 continue
 
             masked_program, original_line = self.get_masked_program(parsed_sample.copy(), idx)
-            potential_counterfactual = self.explainer.explain(masked_program, label2target[original_label])
+            potential_counterfactual = self.explainer.explain(masked_program, original_label)
             unmasked_program = self.unmask_program(self.parser.parse(masked_program), potential_counterfactual, idx)
             counterfactual_label, counterfactual_score = self.blackbox(unmasked_program)
 
@@ -76,9 +74,9 @@ class MultiShotCounterfactual(CounterfactualGenerator):
 
                 print(f"The correct label is: {target}")
                 print(
-                    f"Originally the model predicted {label2target[original_label]} with a confidence of {original_score}.")
+                    f"Originally the model predicted {original_label} with a confidence of {original_score}.")
                 print(
-                    f"After applying the counterfactual the model predicted {label2target[counterfactual_label]} "
+                    f"After applying the counterfactual the model predicted {counterfactual_label} "
                     f"with a confidence of {counterfactual_score}.")
                 print(f"Similarity score: {similarity_score:.{4}f}")
                 print()
@@ -86,7 +84,7 @@ class MultiShotCounterfactual(CounterfactualGenerator):
                 return counterfactual_program, True, similarity_score
 
         print(f"The correct label is: {target}")
-        print(f"Originally the model predicted {label2target[original_label]} with a confidence of {original_score}.")
+        print(f"Originally the model predicted {original_label} with a confidence of {original_score}.")
         print("No counterfactual was found!")
         print()
 
