@@ -20,5 +20,3 @@ def extract_code_from_string(output: str) -> str:
     matched = pattern.search(output)
 
     return matched.group(1) if matched.group(1) else matched.group(2) if matched.group(2) else None
-
-# TODO: does it make sense to generate counterfactuals for samples that the model mispredicted in the first place?

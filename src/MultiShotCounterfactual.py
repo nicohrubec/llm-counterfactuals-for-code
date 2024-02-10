@@ -4,6 +4,7 @@ from typing import Tuple
 from Explainer import Explainer
 from Parser import Parser
 from CounterfactualGenerator import CounterfactualGenerator
+from WrongPredictionError import WrongPredictionError
 
 
 class MultiShotCounterfactual(CounterfactualGenerator):
@@ -33,6 +34,10 @@ class MultiShotCounterfactual(CounterfactualGenerator):
 
     def get_counterfactual(self, sample, target) -> Tuple[str, bool, float]:
         original_label, original_score = self.blackbox(sample)
+
+        if original_label != target:
+            raise WrongPredictionError
+
         parsed_sample = self.parser.parse(sample)
         potential_counterfactuals = []
         heapq.heapify(potential_counterfactuals)

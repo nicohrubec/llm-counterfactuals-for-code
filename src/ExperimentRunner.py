@@ -1,4 +1,5 @@
 from CounterfactualGenerator import CounterfactualGenerator
+from WrongPredictionError import WrongPredictionError
 import traceback
 
 
@@ -13,24 +14,33 @@ class ExperimentRunner:
         raise NotImplementedError
 
     def run_experiment(self, n_samples=30, max_num_lines=25):
-        dataset = self.get_dataset(n_samples, max_num_lines)
+        dataset = self.get_dataset(n_samples * 10, max_num_lines)
 
         counterfactuals = []
         flippeds = []
         similarities = []
+        samples_done = 0
+        idx = 0
+        num_mispredictions = 0
 
-        for i in range(n_samples):
+        while samples_done < n_samples:
             try:
-                print("Iteration ", i + 1)
-                sample, target = self.get_sample(dataset, idx=i)
+                print("Iteration ", samples_done + 1)
+                sample, target = self.get_sample(dataset, idx=idx)
 
                 counterfactual, flipped, similarity = self.counterfactual_generator.get_counterfactual(sample, target)
                 counterfactuals.append(counterfactual)
                 flippeds.append(flipped)
                 similarities.append(similarity)
+                samples_done += 1
+            except WrongPredictionError:
+                num_mispredictions += 1
+                print("Skipping sample because the blackbox mispredicted!")
             except:
                 traceback.print_exc()
-                continue
+                samples_done += 1
+
+            idx += 1
 
         similarities = [v for v in similarities if v is not None]
         counterfactual_similarities = [v for idx, v in enumerate(similarities) if flippeds[idx]]
@@ -40,6 +50,7 @@ class ExperimentRunner:
             print("Experiment similarity score: ", sum(similarities) / len(similarities))
             print("Experiment counterfactual similarity score: ",
                   sum(counterfactual_similarities) / len(counterfactual_similarities))
+            print("Blackbox Accuracy: ", num_mispredictions / idx)
         except ZeroDivisionError:
             print("No counterfactuals were found in this experiment!")
 

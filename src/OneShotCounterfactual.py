@@ -1,11 +1,16 @@
 from typing import Tuple
 
 from CounterfactualGenerator import CounterfactualGenerator
+from WrongPredictionError import WrongPredictionError
 
 
 class OneShotCounterfactual(CounterfactualGenerator):
     def get_counterfactual(self, sample, target) -> Tuple[str, bool, float]:
         original_label, original_score = self.blackbox(sample)
+
+        if original_label != target:
+            raise WrongPredictionError
+
         candidate_counterfactual = self.explainer.explain(sample, original_label)
         counterfactual_label, counterfactual_score = self.blackbox(candidate_counterfactual)
         similarity_score = float(self.similarity_score(sample, candidate_counterfactual)[0][0])
