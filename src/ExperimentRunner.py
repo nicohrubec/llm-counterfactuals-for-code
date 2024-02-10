@@ -50,7 +50,7 @@ class ExperimentRunner:
             print("Experiment similarity score: ", sum(similarities) / len(similarities))
             print("Experiment counterfactual similarity score: ",
                   sum(counterfactual_similarities) / len(counterfactual_similarities))
-            print("Blackbox Accuracy: ", num_mispredictions / idx)
+            print("Blackbox Accuracy: ", 1 - num_mispredictions / idx)
         except ZeroDivisionError:
             print("No counterfactuals were found in this experiment!")
 
