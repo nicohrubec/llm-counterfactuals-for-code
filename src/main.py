@@ -8,7 +8,7 @@ from LineParser import LineParser
 from DefectExperimentRunner import DefectExperimentRunner
 from CloneExperimentRunner import CloneExperimentRunner
 
-model_str = "gpt-3.5-turbo-1106"
+model_str = "gpt-3.5-turbo"
 defect_blackbox_str = "uclanlp/plbart-c-cpp-defect-detection"
 clone_blackbox_str = "uclanlp/plbart-java-clone-detection"
 
