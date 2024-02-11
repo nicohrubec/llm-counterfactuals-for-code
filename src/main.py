@@ -1,6 +1,7 @@
 from SimpleGPTDefectExplainer import SimpleGPTDefectExplainer
 from SimpleGPTCloneExplainer import SimpleGPTCloneExplainer
 from CoTGPTDefectExplainer import CoTGPTDefectExplainer
+from CoTGPTCloneExplainer import CoTGPTCloneExplainer
 from OneShotCounterfactual import OneShotCounterfactual
 from MultiShotCounterfactual import MultiShotCounterfactual
 from MaskedGPTDefectExplainer import MaskedGPTDefectExplainer
@@ -16,6 +17,9 @@ if __name__ == '__main__':
     gpt_explainer = SimpleGPTCloneExplainer(model_str)
     clone_single_shot_counterfactual_generator = OneShotCounterfactual(gpt_explainer, clone_blackbox_str)
 
+    gpt_cot_explainer = CoTGPTCloneExplainer(model_str)
+    clone_single_shot_cot_counterfactual_generator = OneShotCounterfactual(gpt_cot_explainer, clone_blackbox_str)
+
     line_parser = LineParser()
     gpt_explainer = MaskedGPTDefectExplainer(model_str)
     defect_multi_shot_counterfactual_generator = MultiShotCounterfactual(gpt_explainer, defect_blackbox_str, line_parser)
@@ -29,6 +33,8 @@ if __name__ == '__main__':
     print("Clone One shot results: ")
     CloneExperimentRunner(clone_single_shot_counterfactual_generator).run_experiment(n_samples=1)
     print()
+    print("Clone Cot results:")
+    CloneExperimentRunner(clone_single_shot_cot_counterfactual_generator).run_experiment(n_samples=1)
     print("Defect Multi shot results: ")
     DefectExperimentRunner(defect_multi_shot_counterfactual_generator).run_experiment(n_samples=1)
     print()
