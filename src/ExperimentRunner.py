@@ -13,6 +13,49 @@ class ExperimentRunner:
     def get_sample(self, dataset, idx):
         raise NotImplementedError
 
+    def report_results(self, flippeds, idx, num_mispredictions, similarities, targets):
+        similarities = [v for v in similarities if v is not None]
+        counterfactual_similarities = [v for idx, v in enumerate(similarities) if flippeds[idx]]
+        true_labels_flipped = [flipped for idx, flipped in enumerate(flippeds) if targets[idx]]
+        false_labels_flipped = [flipped for idx, flipped in enumerate(flippeds) if not targets[idx]]
+        # report results
+        try:
+            print("Experiment label flip score: ", sum(flippeds) / len(flippeds))
+
+            if len(true_labels_flipped) > 0:
+                print("Experiment label flip score for true labels: ",
+                      sum(true_labels_flipped) / len(true_labels_flipped))
+            else:
+                print("No true labels were evaluated in this experiment!")
+
+            if len(false_labels_flipped) > 0:
+                print("Experiment label flip score for false labels: ",
+                      sum(false_labels_flipped) / len(false_labels_flipped))
+            else:
+                print("No false labels were evaluated in this experiment!")
+
+            if len(similarities) > 0:
+                print("Experiment similarity score: ", sum(similarities) / len(similarities))
+            else:
+                print("No similarity score was reported!")
+
+            if len(counterfactual_similarities) > 0:
+                print("Experiment counterfactual similarity score: ",
+                      sum(counterfactual_similarities) / len(counterfactual_similarities))
+            else:
+                print("No counterfactuals were found in this experiment!")
+
+            print("Blackbox Accuracy: ", 1 - num_mispredictions / idx)
+        except ZeroDivisionError:
+            print("No results available, all samples failed!")
+        # very hacky but needed to print the one shot flip ratio after experiments which is only defined for the
+        # MultiShotCounterfactual generator
+        # TODO: should be moved but not sure yet where to
+        try:
+            print("Experiment one shot flip score: ", self.counterfactual_generator.get_one_shot_flip_ratio())
+        except AttributeError:
+            pass
+
     def run_experiment(self, n_samples=30, max_num_lines=25):
         dataset = self.get_dataset(n_samples * 10, max_num_lines)
 
@@ -48,46 +91,4 @@ class ExperimentRunner:
 
             idx += 1
 
-        similarities = [v for v in similarities if v is not None]
-        counterfactual_similarities = [v for idx, v in enumerate(similarities) if flippeds[idx]]
-        true_labels_flipped = [flipped for idx, flipped in enumerate(flippeds) if targets[idx]]
-        false_labels_flipped = [flipped for idx, flipped in enumerate(flippeds) if not targets[idx]]
-
-        # report results
-        try:
-            print("Experiment label flip score: ", sum(flippeds) / len(flippeds))
-
-            if len(true_labels_flipped) > 0:
-                print("Experiment label flip score for true labels: ",
-                      sum(true_labels_flipped) / len(true_labels_flipped))
-            else:
-                print("No true labels were evaluated in this experiment!")
-
-            if len(false_labels_flipped) > 0:
-                print("Experiment label flip score for false labels: ",
-                      sum(false_labels_flipped) / len(false_labels_flipped))
-            else:
-                print("No false labels were evaluated in this experiment!")
-
-            if len(similarities) > 0:
-                print("Experiment similarity score: ", sum(similarities) / len(similarities))
-            else:
-                print("No similarity score was reported!")
-
-            if len(counterfactual_similarities) > 0:
-                print("Experiment counterfactual similarity score: ",
-                      sum(counterfactual_similarities) / len(counterfactual_similarities))
-            else:
-                print("No counterfactuals were found in this experiment!")
-
-            print("Blackbox Accuracy: ", 1 - num_mispredictions / idx)
-        except ZeroDivisionError:
-            print("No results available, all samples failed!")
-
-        # very hacky but needed to print the one shot flip ratio after experiments which is only defined for the
-        # MultiShotCounterfactual generator
-        # TODO: should be moved but not sure yet where to
-        try:
-            print("Experiment one shot flip score: ", self.counterfactual_generator.get_one_shot_flip_ratio())
-        except AttributeError:
-            pass
+        self.report_results(flippeds, idx, num_mispredictions, similarities, targets)
