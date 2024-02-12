@@ -19,6 +19,7 @@ class ExperimentRunner:
         counterfactuals = []
         flippeds = []
         similarities = []
+        targets = []
         samples_done = 0
         idx = 0
         num_mispredictions = 0
@@ -29,9 +30,13 @@ class ExperimentRunner:
                 sample, target = self.get_sample(dataset, idx=idx)
 
                 counterfactual, flipped, similarity = self.counterfactual_generator.get_counterfactual(sample, target)
+
+                # track results
                 counterfactuals.append(counterfactual)
                 flippeds.append(flipped)
                 similarities.append(similarity)
+                targets.append(target)
+
                 samples_done += 1
             except WrongPredictionError:
                 num_mispredictions += 1
@@ -39,20 +44,45 @@ class ExperimentRunner:
             except:
                 traceback.print_exc()
                 samples_done += 1
+                print("Something went wrong!")
 
             idx += 1
 
         similarities = [v for v in similarities if v is not None]
         counterfactual_similarities = [v for idx, v in enumerate(similarities) if flippeds[idx]]
+        true_labels_flipped = [flipped for idx, flipped in enumerate(flippeds) if targets[idx]]
+        false_labels_flipped = [flipped for idx, flipped in enumerate(flippeds) if not targets[idx]]
 
+        # report results
         try:
             print("Experiment label flip score: ", sum(flippeds) / len(flippeds))
-            print("Experiment similarity score: ", sum(similarities) / len(similarities))
-            print("Experiment counterfactual similarity score: ",
-                  sum(counterfactual_similarities) / len(counterfactual_similarities))
+
+            if len(true_labels_flipped) > 0:
+                print("Experiment label flip score for true labels: ",
+                      sum(true_labels_flipped) / len(true_labels_flipped))
+            else:
+                print("No true labels were evaluated in this experiment!")
+
+            if len(false_labels_flipped) > 0:
+                print("Experiment label flip score for false labels: ",
+                      sum(false_labels_flipped) / len(false_labels_flipped))
+            else:
+                print("No false labels were evaluated in this experiment!")
+
+            if len(similarities) > 0:
+                print("Experiment similarity score: ", sum(similarities) / len(similarities))
+            else:
+                print("No similarity score was reported!")
+
+            if len(counterfactual_similarities) > 0:
+                print("Experiment counterfactual similarity score: ",
+                      sum(counterfactual_similarities) / len(counterfactual_similarities))
+            else:
+                print("No counterfactuals were found in this experiment!")
+
             print("Blackbox Accuracy: ", 1 - num_mispredictions / idx)
         except ZeroDivisionError:
-            print("No counterfactuals were found in this experiment!")
+            print("No results available, all samples failed!")
 
         # very hacky but needed to print the one shot flip ratio after experiments which is only defined for the
         # MultiShotCounterfactual generator
