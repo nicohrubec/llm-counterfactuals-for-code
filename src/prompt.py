@@ -39,7 +39,7 @@ def build_defect_explainer_prompt(sample, prediction: bool) -> str:
 def build_clone_explainer_prompt(sample, prediction: bool) -> str:
     prompt = f"""
     In the task of {clone_task}, a trained black-box classifier predicted the label {prediction} for the following code containing two functions.
-    Generate a counterfactual explanation by making minimal changes to the code, so that the label changes from {prediction} to {not prediction}, {defect_label_explanation}.
+    Generate a counterfactual explanation by making minimal changes to the code, so that the label changes from {prediction} to {not prediction}, {clone_label_explanation}.
     
     {clone_definition}\n\n{counterfactual_definition}\n\n{detailed_instructions_single_shot}
 
