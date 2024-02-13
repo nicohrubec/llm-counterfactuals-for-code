@@ -25,12 +25,14 @@ class ExperimentRunner:
             if len(true_labels_flipped) > 0:
                 print("Experiment label flip score for true labels: ",
                       sum(true_labels_flipped) / len(true_labels_flipped))
+                print("Number of True labels encountered: ", len(true_labels_flipped))
             else:
                 print("No true labels were evaluated in this experiment!")
 
             if len(false_labels_flipped) > 0:
                 print("Experiment label flip score for false labels: ",
                       sum(false_labels_flipped) / len(false_labels_flipped))
+                print("Number of False labels encountered: ", len(false_labels_flipped))
             else:
                 print("No false labels were evaluated in this experiment!")
 
