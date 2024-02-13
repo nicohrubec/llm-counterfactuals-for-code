@@ -21,6 +21,7 @@ class OneShotCounterfactual(CounterfactualGenerator):
             f"After applying the counterfactual the model predicted {counterfactual_label} with a confidence of "
             f"{counterfactual_score}.")
         print(f"Similarity score: {similarity_score:.{4}f}")
+        print(f"Original sample:\n{sample}\n\nProposed counterfactual:\n{candidate_counterfactual}")
         print()
 
         return candidate_counterfactual, original_label != counterfactual_label, similarity_score

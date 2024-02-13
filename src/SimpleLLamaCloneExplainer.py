@@ -10,6 +10,4 @@ class SimpleLLamaCloneExplainer(LLamaExplainer):
         response = self.ask_llama(prompt)
         explanation = extract_code_from_string(response[prompt_len:])
 
-        print(explanation)
-
         return explanation

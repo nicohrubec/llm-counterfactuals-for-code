@@ -84,6 +84,7 @@ class MultiShotCounterfactual(CounterfactualGenerator):
                     f"After applying the counterfactual the model predicted {counterfactual_label} "
                     f"with a confidence of {counterfactual_score}.")
                 print(f"Similarity score: {similarity_score:.{4}f}")
+                print(f"Original sample:\n{sample}\n\nProposed counterfactual:\n{counterfactual_program}")
                 print()
 
                 return counterfactual_program, True, similarity_score

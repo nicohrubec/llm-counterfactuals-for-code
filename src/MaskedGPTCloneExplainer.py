@@ -13,6 +13,4 @@ class MaskedGPTCloneExplainer(GPTExplainer):
         except:
             explanation = ""
 
-        print(explanation)
-
         return explanation

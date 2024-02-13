@@ -22,6 +22,4 @@ class CoTGPTDefectExplainer(GPTExplainer):
         answer = self.ask_gpt(messages)
         explanation = extract_code_from_string(answer)
 
-        print(explanation)
-
         return explanation

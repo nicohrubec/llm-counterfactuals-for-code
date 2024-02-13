@@ -13,6 +13,4 @@ class MaskedGPTDefectExplainer(GPTExplainer):
         except:
             explanation = ""
 
-        print(explanation)
-
         return explanation

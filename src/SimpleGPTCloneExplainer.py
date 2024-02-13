@@ -9,6 +9,4 @@ class SimpleGPTCloneExplainer(GPTExplainer):
         response = self.ask_gpt(prompt)
         explanation = extract_code_from_string(response)
 
-        print(explanation)
-
         return explanation
