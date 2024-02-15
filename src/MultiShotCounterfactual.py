@@ -17,9 +17,8 @@ class MultiShotCounterfactual(CounterfactualGenerator):
         self.parser = parser
 
     def get_masked_program(self, split_program, idx):
-        original_line = split_program[idx]
         split_program[idx] = self.line_mask
-        return self.parser.unparse(split_program), original_line
+        return self.parser.unparse(split_program)
 
     def unmask_program(self, program, replacement, idx):
         program[idx] = replacement
@@ -46,7 +45,7 @@ class MultiShotCounterfactual(CounterfactualGenerator):
             if not len(line.strip()) > 1:
                 continue
 
-            masked_program, original_line = self.get_masked_program(parsed_sample.copy(), idx)
+            masked_program = self.get_masked_program(parsed_sample.copy(), idx)
             potential_counterfactual = self.explainer.explain(masked_program, original_label)
             unmasked_program = self.unmask_program(self.parser.parse(masked_program), potential_counterfactual, idx)
             counterfactual_label, counterfactual_score = self.blackbox(unmasked_program)
