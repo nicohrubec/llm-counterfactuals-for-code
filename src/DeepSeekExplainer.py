@@ -26,6 +26,7 @@ class DeepSeekExplainer(Explainer):
                                       top_k=50,
                                       top_p=0.95,
                                       num_return_sequences=1,
-                                      eos_token_id=self.tokenizer.eos_token_id)
+                                      eos_token_id=self.tokenizer.eos_token_id,
+                                      pad_token_id=self.tokenizer.pad_token_id)
 
         return self.tokenizer.decode(outputs[0][len(inputs[0]):], skip_special_tokens=True)
