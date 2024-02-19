@@ -10,7 +10,7 @@ class DeepSeekExplainer(Explainer):
         self.tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/deepseek-coder-7b-instruct-v1.5",
                                                        trust_remote_code=True)
         self.model = AutoModelForCausalLM.from_pretrained("deepseek-ai/deepseek-coder-7b-instruct-v1.5",
-                                                          trust_remote_code=True).cuda()
+                                                          trust_remote_code=True, torch_dtype=torch.bfloat16).cuda()
 
     def ask_deepseek(self, prompt):
         messages = [
