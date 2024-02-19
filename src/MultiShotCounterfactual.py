@@ -42,7 +42,7 @@ class MultiShotCounterfactual(CounterfactualGenerator):
         heapq.heapify(potential_counterfactuals)
 
         for idx, line in enumerate(parsed_sample):
-            if not len(line.strip()) > 1:
+            if idx == 0 or not len(line.strip()) > 1:
                 continue
 
             masked_program = self.get_masked_program(parsed_sample.copy(), idx)
