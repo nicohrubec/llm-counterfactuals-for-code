@@ -11,5 +11,5 @@ class CounterfactualGenerator:
         self.explainer = explainer
         self.similarity_score = SimilarityMetric()
 
-    def get_counterfactual(self, sample, target) -> Tuple[str, bool, float]:
+    def get_counterfactual(self, sample, target) -> Tuple[str, bool, float, int]:
         raise NotImplementedError

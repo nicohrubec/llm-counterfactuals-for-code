@@ -1,5 +1,6 @@
 import heapq
 from typing import Tuple
+from Levenshtein import distance
 
 from Explainer import Explainer
 from Parser import Parser
@@ -34,7 +35,7 @@ class MultiShotCounterfactual(CounterfactualGenerator):
         if flipped: self.one_shot_flipped += 1
         self.num_candidates_produced += 1
 
-    def get_counterfactual(self, sample, target) -> Tuple[str, bool, float]:
+    def get_counterfactual(self, sample, target) -> Tuple[str, bool, float, int]:
         original_label, original_score = self.blackbox(sample)
 
         if original_label != target:
@@ -81,26 +82,24 @@ class MultiShotCounterfactual(CounterfactualGenerator):
                 counterfactual_score = prev_counterfactual_score
 
             if flipped:  # counterfactual found
-                proposed_counterfactual, similarity_score = self.report_results(counterfactual_label,
-                                                                                1 - counterfactual_score, original_label,
-                                                                                original_score,
-                                                                                parsed_counterfactual_program, sample,
-                                                                                target)
+                proposed_counterfactual, similarity_score, token_distance = \
+                    self.report_results(counterfactual_label, 1 - counterfactual_score, original_label, original_score,
+                                        parsed_counterfactual_program, sample, target)
 
-                return proposed_counterfactual, True, similarity_score
+                return proposed_counterfactual, True, similarity_score, token_distance
 
-        proposed_counterfactual, similarity_score = self.report_results(original_label,
-                                                                        counterfactual_score, original_label,
-                                                                        original_score,
-                                                                        parsed_counterfactual_program, sample,
-                                                                        target)
+        proposed_counterfactual, similarity_score, token_distance = \
+            self.report_results(original_label, counterfactual_score, original_label, original_score,
+                                parsed_counterfactual_program, sample, target)
 
-        return proposed_counterfactual, False, similarity_score
+        return proposed_counterfactual, False, similarity_score, token_distance
 
     def report_results(self, counterfactual_label, counterfactual_score, original_label, original_score,
                        parsed_counterfactual_program, sample, target):
         proposed_counterfactual = self.parser.unparse(parsed_counterfactual_program)
         similarity_score = float(self.similarity_score(sample, proposed_counterfactual)[0][0])
+        token_distance = distance(sample, proposed_counterfactual)
+
         print(f"The correct label is: {target}")
         print(
             f"Originally the model predicted {original_label} with a confidence of {original_score}.")
@@ -108,6 +107,7 @@ class MultiShotCounterfactual(CounterfactualGenerator):
             f"After applying the counterfactual the model predicted {counterfactual_label} "
             f"with a confidence of {counterfactual_score}.")
         print(f"Similarity score: {similarity_score:.{4}f}")
+        print(f"Token distance: {token_distance}")
         print(f"Original sample:\n{sample}\n\nProposed counterfactual:\n{proposed_counterfactual}")
         print()
-        return proposed_counterfactual, similarity_score
+        return proposed_counterfactual, similarity_score, token_distance

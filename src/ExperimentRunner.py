@@ -13,9 +13,10 @@ class ExperimentRunner:
     def get_sample(self, dataset, idx):
         raise NotImplementedError
 
-    def report_results(self, flippeds, idx, num_mispredictions, similarities, targets):
+    def report_results(self, flippeds, idx, num_mispredictions, similarities, token_distances, targets):
         similarities = [v for v in similarities if v is not None]
         counterfactual_similarities = [v for idx, v in enumerate(similarities) if flippeds[idx]]
+        counterfactual_distances = [v for idx, v in enumerate(similarities) if flippeds[idx]]
         true_labels_flipped = [flipped for idx, flipped in enumerate(flippeds) if targets[idx]]
         false_labels_flipped = [flipped for idx, flipped in enumerate(flippeds) if not targets[idx]]
         # report results
@@ -47,6 +48,15 @@ class ExperimentRunner:
             else:
                 print("No counterfactuals were found in this experiment!")
 
+            if len(token_distances) > 0:
+                print("Experiment token distance: ", sum(token_distances) / len(token_distances))
+            else:
+                print("No token distance was reported!")
+
+            if len(counterfactual_distances) > 0:
+                print("Experiment counterfactual token distance: ",
+                      sum(counterfactual_distances) / len(counterfactual_distances))
+
             print("Blackbox Accuracy: ", 1 - num_mispredictions / idx)
         except ZeroDivisionError:
             print("No results available, all samples failed!")
@@ -65,6 +75,7 @@ class ExperimentRunner:
         flippeds = []
         similarities = []
         targets = []
+        token_distances = []
         samples_done = 0
         idx = 0
         num_mispredictions = 0
@@ -74,12 +85,14 @@ class ExperimentRunner:
                 print("Iteration ", samples_done + 1)
                 sample, target = self.get_sample(dataset, idx=idx)
 
-                counterfactual, flipped, similarity = self.counterfactual_generator.get_counterfactual(sample, target)
+                counterfactual, flipped, similarity, token_distance = \
+                    self.counterfactual_generator.get_counterfactual(sample, target)
 
                 # track results
                 counterfactuals.append(counterfactual)
                 flippeds.append(flipped)
                 similarities.append(similarity)
+                token_distances.append(token_distance)
                 targets.append(target)
 
                 samples_done += 1
@@ -93,4 +106,4 @@ class ExperimentRunner:
 
             idx += 1
 
-        self.report_results(flippeds, idx, num_mispredictions, similarities, targets)
+        self.report_results(flippeds, idx, num_mispredictions, similarities, token_distances, targets)
