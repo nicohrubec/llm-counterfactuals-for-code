@@ -81,23 +81,33 @@ class MultiShotCounterfactual(CounterfactualGenerator):
                 counterfactual_score = prev_counterfactual_score
 
             if flipped:  # counterfactual found
-                similarity_score = float(self.similarity_score(sample, counterfactual_program)[0][0])
+                proposed_counterfactual, similarity_score = self.report_results(counterfactual_label,
+                                                                                1 - counterfactual_score, original_label,
+                                                                                original_score,
+                                                                                parsed_counterfactual_program, sample,
+                                                                                target)
 
-                print(f"The correct label is: {target}")
-                print(
-                    f"Originally the model predicted {original_label} with a confidence of {original_score}.")
-                print(
-                    f"After applying the counterfactual the model predicted {counterfactual_label} "
-                    f"with a confidence of {counterfactual_score}.")
-                print(f"Similarity score: {similarity_score:.{4}f}")
-                print(f"Original sample:\n{sample}\n\nProposed counterfactual:\n{counterfactual_program}")
-                print()
+                return proposed_counterfactual, True, similarity_score
 
-                return counterfactual_program, True, similarity_score
+        proposed_counterfactual, similarity_score = self.report_results(original_label,
+                                                                        counterfactual_score, original_label,
+                                                                        original_score,
+                                                                        parsed_counterfactual_program, sample,
+                                                                        target)
 
+        return proposed_counterfactual, False, similarity_score
+
+    def report_results(self, counterfactual_label, counterfactual_score, original_label, original_score,
+                       parsed_counterfactual_program, sample, target):
+        proposed_counterfactual = self.parser.unparse(parsed_counterfactual_program)
+        similarity_score = float(self.similarity_score(sample, proposed_counterfactual)[0][0])
         print(f"The correct label is: {target}")
-        print(f"Originally the model predicted {original_label} with a confidence of {original_score}.")
-        print("No counterfactual was found!")
+        print(
+            f"Originally the model predicted {original_label} with a confidence of {original_score}.")
+        print(
+            f"After applying the counterfactual the model predicted {counterfactual_label} "
+            f"with a confidence of {counterfactual_score}.")
+        print(f"Similarity score: {similarity_score:.{4}f}")
+        print(f"Original sample:\n{sample}\n\nProposed counterfactual:\n{proposed_counterfactual}")
         print()
-
-        return counterfactual_program, False, None
+        return proposed_counterfactual, similarity_score
