@@ -20,7 +20,10 @@ class MultiShotCounterfactual(CounterfactualGenerator):
         split_program[idx] = self.line_mask
         return self.parser.unparse(split_program)
 
-    def unmask_program(self, program, replacement, idx):
+    def unmask_program(self, program, replacement):
+        return program.replace(self.line_mask, replacement)
+
+    def replace_line(self, program, replacement, idx):
         program[idx] = replacement
         return "\n".join(program)
 
@@ -42,12 +45,12 @@ class MultiShotCounterfactual(CounterfactualGenerator):
         heapq.heapify(potential_counterfactuals)
 
         for idx, line in enumerate(parsed_sample):
-            if idx == 0 or not len(line.strip()) > 1:
+            if idx == 0 or len(line.strip()) == 1:
                 continue
 
             masked_program = self.get_masked_program(parsed_sample.copy(), idx)
             potential_counterfactual = self.explainer.explain(masked_program, original_label)
-            unmasked_program = self.unmask_program(self.parser.parse(masked_program), potential_counterfactual, idx)
+            unmasked_program = self.unmask_program(masked_program, potential_counterfactual)
             counterfactual_label, counterfactual_score = self.blackbox(unmasked_program)
 
             # high confident samples with different labels should be considered first
@@ -63,9 +66,13 @@ class MultiShotCounterfactual(CounterfactualGenerator):
         while potential_counterfactuals:
             _, potential_counterfactual, idx = heapq.heappop(potential_counterfactuals)
 
-            counterfactual_program = self.unmask_program(parsed_counterfactual_program, potential_counterfactual, idx)
+            counterfactual_program = self.replace_line(parsed_counterfactual_program.copy(), potential_counterfactual, idx)
             prev_counterfactual_score = counterfactual_score
             counterfactual_label, counterfactual_score = self.blackbox(counterfactual_program)
+
+            flipped = counterfactual_label != original_label
+            if flipped:
+                counterfactual_score = 1 - counterfactual_score
 
             # check if last step has brought us closer to a solution
             if counterfactual_score < prev_counterfactual_score:
@@ -73,7 +80,7 @@ class MultiShotCounterfactual(CounterfactualGenerator):
             else:
                 counterfactual_score = prev_counterfactual_score
 
-            if counterfactual_label != original_label:  # counterfactual found
+            if flipped:  # counterfactual found
                 similarity_score = float(self.similarity_score(sample, counterfactual_program)[0][0])
 
                 print(f"The correct label is: {target}")
