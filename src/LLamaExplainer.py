@@ -25,7 +25,10 @@ class LLamaExplainer(Explainer):
         sequences = self.llm(
             prompt,
             do_sample=True,
-            top_k=10,
+            top_k=self.top_k,
+            top_p=self.top_p,
+            repetition_penalty=self.repetition_penalty,
+            temperature=self.temperature,
             num_return_sequences=1,
             eos_token_id=self.tokenizer.eos_token_id,
             max_length=3000,

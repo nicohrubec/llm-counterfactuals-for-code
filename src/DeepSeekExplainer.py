@@ -22,9 +22,11 @@ class DeepSeekExplainer(Explainer):
 
         outputs = self.model.generate(inputs,
                                       max_new_tokens=3000,
-                                      do_sample=False,
-                                      top_k=50,
-                                      top_p=0.95,
+                                      do_sample=True,
+                                      top_k=self.top_k,
+                                      temperature=self.temperature,
+                                      top_p=self.top_p,
+                                      repetition_penalty=self.repetition_penalty,
                                       num_return_sequences=1,
                                       eos_token_id=self.tokenizer.eos_token_id,
                                       pad_token_id=self.tokenizer.pad_token_id)

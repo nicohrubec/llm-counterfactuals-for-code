@@ -29,9 +29,10 @@ class GemmaExplainer(Explainer):
             max_new_tokens=3000,
             add_special_tokens=True,
             do_sample=True,
-            temperature=0.7,
-            top_k=50,
-            top_p=0.95
+            temperature=self.temperature,
+            top_k=self.top_k,
+            top_p=self.top_p,
+            repetition_penalty=self.repetition_penalty
         )
 
         return outputs[0]["generated_text"][len(prompt):]

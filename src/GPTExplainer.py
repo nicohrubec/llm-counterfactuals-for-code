@@ -23,9 +23,9 @@ class GPTExplainer(Explainer):
 
         completion = self.client.chat.completions.create(
             model=self.model,
-            temperature=0.4,
-            frequency_penalty=1.1,
-            top_p=1.0,
+            temperature=self.temperature,
+            frequency_penalty=self.repetition_penalty,
+            top_p=self.top_p,
             messages=messages
         )
 
