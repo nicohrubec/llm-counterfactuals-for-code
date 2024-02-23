@@ -122,17 +122,3 @@ def build_clone_identify_words_prompt(sample, prediction: bool) -> str:
     List ONLY the lines as a comma separated list.\n—\nCode:\n{sample}\n"""
 
     return prompt
-
-
-def build_llama_prompt(system_prompt, prompt):
-    prompt = f"""
-<s>[INST] <<SYS>>
-{system_prompt}
-<</SYS>>
-
-{prompt} [/INST] 
-"""
-    prompt_len = len(prompt)
-    prompt += " <code>"
-
-    return prompt, prompt_len
