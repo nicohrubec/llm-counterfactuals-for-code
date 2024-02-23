@@ -50,7 +50,7 @@ class MultiShotCounterfactual(CounterfactualGenerator):
                 continue
 
             masked_program = self.get_masked_program(parsed_sample.copy(), idx)
-            potential_counterfactual = self.explainer.explain(masked_program, original_label)
+            potential_counterfactual = self.explainer.explain(masked_program, original_label)[0]
             unmasked_program = self.unmask_program(masked_program, potential_counterfactual)
             counterfactual_label, counterfactual_score = self.blackbox(unmasked_program)
 

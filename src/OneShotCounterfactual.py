@@ -12,7 +12,7 @@ class OneShotCounterfactual(CounterfactualGenerator):
         if original_label != target:
             raise WrongPredictionError
 
-        candidate_counterfactual = self.explainer.explain(sample, original_label)
+        candidate_counterfactual = self.explainer.explain(sample, original_label)[0]
         counterfactual_label, counterfactual_score = self.blackbox(candidate_counterfactual)
         similarity_score = float(self.similarity_score(sample, candidate_counterfactual)[0][0])
         token_distance = distance(sample, candidate_counterfactual)
