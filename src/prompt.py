@@ -14,6 +14,8 @@ counterfactual_definition = """Use the following definition of 'counterfactual e
 A counterfactual explanation reveals what should have been different in an instance to observe a diverse outcome."""
 detailed_instructions_single_shot = """
 Enclose the code with the counterfactual in <code> tags.
+For each counterfactual you propose, always return the full original code, the only exception should be your proposed alteration.
+As mentioned the change should be minimal and therefore not affect more than 5 lines of the original code.
 """
 detailed_instructions_multi_shot = """
 Enclose the suggested code line with the counterfactual in <code> tags. 
@@ -22,25 +24,27 @@ Align the suggested code line properly based on the surrounding code to ensure n
 """
 
 
-def build_defect_explainer_prompt(sample, prediction: bool) -> str:
+def build_defect_explainer_prompt(sample, prediction: bool, n: int) -> str:
     prompt = f"""
     In the task of {defect_task}, a trained black-box classifier predicted the label {prediction} for the following code.
-    Generate a counterfactual explanation by making minimal changes to the code, so that the label changes from {prediction} to {not prediction}.
+    Generate {n} counterfactual explanations by making minimal changes to the code, so that the label changes from {prediction} to {not prediction}.
     {defect_label_explanation}
-    
+    You should suggest exactly {n} counterfactual explanations.
+
     {defect_definition}\n\n{counterfactual_definition}\n\n{detailed_instructions_single_shot}
-    
+
     \n—\nCode:\n{sample}\n
     """
 
     return prompt
 
 
-def build_clone_explainer_prompt(sample, prediction: bool) -> str:
+def build_clone_explainer_prompt(sample, prediction: bool, n: int) -> str:
     prompt = f"""
     In the task of {clone_task}, a trained black-box classifier predicted the label {prediction} for the following code containing two functions.
-    Generate a counterfactual explanation by making minimal changes to the code, so that the label changes from {prediction} to {not prediction}.
+    Generate {n} counterfactual explanations by making minimal changes to the code, so that the label changes from {prediction} to {not prediction}.
     {clone_label_explanation}
+    You should suggest exactly {n} counterfactual explanations.
     
     {clone_definition}\n\n{counterfactual_definition}\n\n{detailed_instructions_single_shot}
 

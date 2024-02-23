@@ -1,4 +1,5 @@
 import re
+from typing import List
 
 from datasets import load_dataset
 
@@ -20,3 +21,14 @@ def extract_code_from_string(output: str) -> str:
     matched = pattern.search(output)
 
     return matched.group(1) if matched.group(1) else matched.group(2) if matched.group(2) else None
+
+
+def extract_all_code_from_string(output: str) -> List[str]:
+    pattern = re.compile(r'<code>(.*?)<\/?code>|\`\`\`(?:c|java)(.*?)\`\`\`', re.DOTALL)
+    matches = pattern.findall(output)
+    snippets = []
+    for match in matches:
+        snippet = match[0] if match[0] else match[1]
+        if snippet:
+            snippets.append(snippet)
+    return snippets

@@ -1,14 +1,18 @@
 from typing import List
 
-from helpers import extract_code_from_string
+from helpers import extract_all_code_from_string
 from prompt import build_clone_explainer_prompt
 from GPTExplainer import GPTExplainer
 
 
 class SimpleGPTCloneExplainer(GPTExplainer):
-    def explain(self, sample: str, prediction: bool) -> List[str]:
-        prompt = build_clone_explainer_prompt(sample, prediction)
-        response = self.ask_gpt(prompt)
-        explanation = extract_code_from_string(response)
+    def __init__(self, model_str, num_counterfactuals=1):
+        super().__init__(model_str)
+        self.num_counterfactuals = num_counterfactuals
 
-        return [explanation]
+    def explain(self, sample: str, prediction: bool) -> List[str]:
+        prompt = build_clone_explainer_prompt(sample, prediction, self.num_counterfactuals)
+        response = self.ask_gpt(prompt)
+        explanation = extract_all_code_from_string(response)
+
+        return explanation
