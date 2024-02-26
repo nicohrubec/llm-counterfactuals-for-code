@@ -1,5 +1,6 @@
 import re
 from typing import List
+import string
 
 from datasets import load_dataset
 
@@ -42,3 +43,9 @@ def remove_comments(program: str) -> str:
         lines.append(line_without_comment)
     return '\n'.join(lines)
 
+
+# Compares if two programs are the same while ignoring whitespace
+def is_equal_for_programs(p1: str, p2: str) -> bool:
+    remove = string.punctuation + string.whitespace
+    mapping = {ord(c): None for c in remove}
+    return p1.translate(mapping) == p2.translate(mapping)
