@@ -16,7 +16,7 @@ counterfactual_definition = """Use the following definition of 'counterfactual e
 A counterfactual explanation reveals what should have been different in an instance to observe a diverse outcome."""
 detailed_instructions_single_shot = """
 Enclose the code with the counterfactual in <code> tags.
-For each counterfactual you propose, always return the full original code, the only exception should be your proposed alteration.
+For each counterfactual you propose, return the full original code with your proposed alteration embedded in it.
 As mentioned the change should be minimal and therefore not affect more than 5 lines of the original code.
 """
 detailed_instructions_multi_shot = """
@@ -34,9 +34,9 @@ def add_previous_solutions(previous_solutions: List[Tuple[str, float]]):
     You can choose to build on top of these solutions by adding additional changes or create a new one.
     """
 
-    for previous_solution, prediction_change in previous_solutions:
+    for prediction_change, previous_solution in previous_solutions:
         previous_solutions_prompt += f"""
-        The following counterfactual resulted in a prediction change of {prediction_change}:
+        The following counterfactual resulted in a prediction change of {prediction_change}:\n
         {previous_solution}\n\n
         """
 
