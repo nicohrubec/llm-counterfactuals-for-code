@@ -16,7 +16,7 @@ class ExperimentRunner:
     def report_results(self, flippeds, idx, num_mispredictions, similarities, token_distances, targets):
         similarities = [v for v in similarities if v is not None]
         counterfactual_similarities = [v for idx, v in enumerate(similarities) if flippeds[idx]]
-        counterfactual_distances = [v for idx, v in enumerate(similarities) if flippeds[idx]]
+        counterfactual_distances = [v for idx, v in enumerate(token_distances) if flippeds[idx]]
         true_labels_flipped = [flipped for idx, flipped in enumerate(flippeds) if targets[idx]]
         false_labels_flipped = [flipped for idx, flipped in enumerate(flippeds) if not targets[idx]]
         # report results
