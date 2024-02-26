@@ -41,7 +41,9 @@ def remove_comments(program: str) -> str:
         # Split the line on the first occurrence of "//"
         line_without_comment, _, _ = line.partition('//')
         lines.append(line_without_comment)
-    return '\n'.join(lines)
+
+    lines = '\n'.join(lines)
+    return remove_empty_lines(lines)
 
 
 # Compares if two programs are the same while ignoring whitespace
@@ -49,3 +51,10 @@ def is_equal_for_programs(p1: str, p2: str) -> bool:
     remove = string.punctuation + string.whitespace
     mapping = {ord(c): None for c in remove}
     return p1.translate(mapping) == p2.translate(mapping)
+
+
+def remove_empty_lines(input_string):
+    lines = input_string.split('\n')
+    non_empty_lines = filter(lambda x: x.strip(), lines)
+    result_string = '\n'.join(non_empty_lines)
+    return result_string
