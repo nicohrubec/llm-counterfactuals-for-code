@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from helpers import extract_all_code_from_string
+from helpers import extract_all_code_from_string, remove_comments
 from prompt import build_defect_explainer_prompt
 from GPTExplainer import GPTExplainer
 
@@ -13,6 +13,7 @@ class SimpleGPTDefectExplainer(GPTExplainer):
     def explain(self, sample: str, prediction: bool, previous_solutions: List[Tuple[str, float]] = None) -> List[str]:
         prompt = build_defect_explainer_prompt(sample, prediction, self.num_counterfactuals, previous_solutions)
         response = self.ask_gpt(prompt)
-        explanation = extract_all_code_from_string(response)
+        explanations = extract_all_code_from_string(response)
+        explanations = [remove_comments(explanation) for explanation in explanations]
 
-        return explanation
+        return explanations
