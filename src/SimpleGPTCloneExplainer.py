@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 from helpers import extract_all_code_from_string
 from prompt import build_clone_explainer_prompt
@@ -10,8 +10,8 @@ class SimpleGPTCloneExplainer(GPTExplainer):
         super().__init__(model_str)
         self.num_counterfactuals = num_counterfactuals
 
-    def explain(self, sample: str, prediction: bool) -> List[str]:
-        prompt = build_clone_explainer_prompt(sample, prediction, self.num_counterfactuals)
+    def explain(self, sample: str, prediction: bool, previous_solutions: List[Tuple[str, float]] = None) -> List[str]:
+        prompt = build_clone_explainer_prompt(sample, prediction, self.num_counterfactuals, previous_solutions)
         response = self.ask_gpt(prompt)
         explanation = extract_all_code_from_string(response)
 

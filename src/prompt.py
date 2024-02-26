@@ -1,3 +1,5 @@
+from typing import List, Tuple
+
 clone_task = "Code Defect Detection on the Devign dataset"
 defect_task = "Code Clone Detection on the Big Clone Bench dataset"
 clone_label_explanation = "The label 'True' means that the functions are clones, so you need to change the semantics in such a way that the functions are not clones anymore." \
@@ -24,7 +26,24 @@ Align the suggested code line properly based on the surrounding code to ensure n
 """
 
 
-def build_defect_explainer_prompt(sample, prediction: bool, n: int) -> str:
+def add_previous_solutions(previous_solutions: List[Tuple[str, float]]):
+    previous_solutions.sort(key=lambda x: x[1])
+    previous_solutions_prompt = """
+    Previously you proposed the following list of altered programs when asked to generate a counterfactual explanation.
+    The prediction change describes by how much the confidence of the black-box classifier shifted as a result of the counterfactual, so a higher prediction change means we are closer to flipping the label.
+    You can choose to build on top of these solutions by adding additional changes or create a new one.
+    """
+
+    for previous_solution, prediction_change in previous_solutions:
+        previous_solutions_prompt += f"""
+        The following counterfactual resulted in a prediction change of {prediction_change}:
+        {previous_solution}\n\n
+        """
+
+    return previous_solutions_prompt
+
+
+def build_defect_explainer_prompt(sample, prediction: bool, n: int, previous_solutions: List[Tuple[str, float]]) -> str:
     prompt = f"""
     In the task of {defect_task}, a trained black-box classifier predicted the label {prediction} for the following code.
     Generate {n} counterfactual explanations by making minimal changes to the code, so that the label changes from {prediction} to {not prediction}.
@@ -33,13 +52,16 @@ def build_defect_explainer_prompt(sample, prediction: bool, n: int) -> str:
 
     {defect_definition}\n\n{counterfactual_definition}\n\n{detailed_instructions_single_shot}
 
-    \n—\nCode:\n{sample}\n
+    \n—\nCode:\n{sample}\n\n
     """
+
+    if previous_solutions:
+        prompt += add_previous_solutions(previous_solutions)
 
     return prompt
 
 
-def build_clone_explainer_prompt(sample, prediction: bool, n: int) -> str:
+def build_clone_explainer_prompt(sample, prediction: bool, n: int, previous_solutions: List[Tuple[str, float]]) -> str:
     prompt = f"""
     In the task of {clone_task}, a trained black-box classifier predicted the label {prediction} for the following code containing two functions.
     Generate {n} counterfactual explanations by making minimal changes to the code, so that the label changes from {prediction} to {not prediction}.
@@ -48,8 +70,11 @@ def build_clone_explainer_prompt(sample, prediction: bool, n: int) -> str:
     
     {clone_definition}\n\n{counterfactual_definition}\n\n{detailed_instructions_single_shot}
 
-    \n—\nCode:\n{sample}\n
+    \n—\nCode:\n{sample}\n\n
     """
+
+    if previous_solutions:
+        prompt += add_previous_solutions(previous_solutions)
 
     return prompt
 

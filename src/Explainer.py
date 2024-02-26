@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 
 class Explainer:
@@ -9,5 +9,5 @@ class Explainer:
     top_p = 1.0
     repetition_penalty = 1.1
 
-    def explain(self, sample: str, prediction: bool) -> List[str]:
+    def explain(self, sample: str, prediction: bool, previous_solutions: List[Tuple[str, float]] = None) -> List[str]:
         raise NotImplementedError

@@ -4,6 +4,7 @@ from CoTGPTDefectExplainer import CoTGPTDefectExplainer
 from CoTGPTCloneExplainer import CoTGPTCloneExplainer
 from OneShotCounterfactual import OneShotCounterfactual
 from MultiShotCounterfactual import MultiShotCounterfactual
+from ReflectiveCounterfactual import ReflectiveCounterfactual
 from MaskedGPTDefectExplainer import MaskedGPTDefectExplainer
 from MaskedGPTCloneExplainer import MaskedGPTCloneExplainer
 from LineParser import LineParser
@@ -21,9 +22,11 @@ if __name__ == '__main__':
 
     gpt_explainer = SimpleGPTCloneExplainer(model_str)
     clone_single_shot_counterfactual_generator = OneShotCounterfactual(gpt_explainer, clone_blackbox_str)
+    clone_reflective_counterfactual_generator = ReflectiveCounterfactual(gpt_explainer, clone_blackbox_str)
 
     gpt_explainer = SimpleGPTCloneExplainer(model_str, num_counterfactuals=3)
     clone_single_shot_multi_counterfactual_generator = OneShotCounterfactual(gpt_explainer, clone_blackbox_str)
+    clone_reflective_multi_counterfactual_generator = ReflectiveCounterfactual(gpt_explainer, clone_blackbox_str)
 
     gpt_cot_explainer = CoTGPTCloneExplainer(model_str)
     clone_single_shot_cot_counterfactual_generator = OneShotCounterfactual(gpt_cot_explainer, clone_blackbox_str)
@@ -34,9 +37,11 @@ if __name__ == '__main__':
 
     gpt_explainer = SimpleGPTDefectExplainer(model_str)
     defect_single_shot_counterfactual_generator = OneShotCounterfactual(gpt_explainer, defect_blackbox_str)
+    defect_reflective_counterfactual_generator = ReflectiveCounterfactual(gpt_explainer, defect_blackbox_str)
 
     gpt_explainer = SimpleGPTDefectExplainer(model_str, num_counterfactuals=3)
     defect_single_shot_multi_counterfactual_generator = OneShotCounterfactual(gpt_explainer, defect_blackbox_str)
+    defect_reflective_multi_counterfactual_generator = ReflectiveCounterfactual(gpt_explainer, defect_blackbox_str)
 
     gpt_cot_explainer = CoTGPTDefectExplainer(model_str)
     defect_single_shot_cot_counterfactual_generator = OneShotCounterfactual(gpt_cot_explainer, defect_blackbox_str)
@@ -64,3 +69,9 @@ if __name__ == '__main__':
     print()
     print("Defect Cot results:")
     DefectExperimentRunner(defect_single_shot_cot_counterfactual_generator).run_experiment(n_samples=1)
+    print("Defect Reflection N=1 results: ")
+    DefectExperimentRunner(defect_reflective_counterfactual_generator).run_experiment(n_samples=1)
+    print()
+    print("Defect Reflection N=3 results: ")
+    DefectExperimentRunner(defect_reflective_multi_counterfactual_generator).run_experiment(n_samples=1)
+    print()
