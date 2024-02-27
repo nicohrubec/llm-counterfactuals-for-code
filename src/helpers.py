@@ -9,7 +9,7 @@ def count_lines(text):
     return text.count('\n') + 1
 
 
-def get_dataset(dataset_name, n_samples=100, max_num_lines=25, filter_col='func'):
+def get_dataset(dataset_name, n_samples=100, max_num_lines=50, filter_col='func'):
     dataset = load_dataset(dataset_name, split="train").to_pandas()
     dataset['num_lines'] = dataset[filter_col].apply(count_lines)
     dataset = dataset[dataset.num_lines <= max_num_lines]
