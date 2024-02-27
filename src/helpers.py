@@ -25,13 +25,20 @@ def extract_code_from_string(output: str) -> str:
 
 
 def extract_all_code_from_string(output: str) -> List[str]:
-    pattern = re.compile(r'<code>(.*?)<\/?code>|\`\`\`(?:c|java)(.*?)\`\`\`', re.DOTALL)
+    pattern = re.compile(r'<code>(.*?)<\/?code>|\`\`\`<code>(.*?)\`\`\`|\`\`\`(?:c|java)(.*?)\`\`\`', re.DOTALL)
     matches = pattern.findall(output)
     snippets = []
     for match in matches:
-        snippet = match[0] if match[0] else match[1]
+        if match[0]:
+            snippet = match[0]
+        elif match[1]:
+            snippet = match[1]
+        else:
+            snippet = match[2]
         if snippet:
+            snippet = "\n".join([line for line in snippet.split("\n") if "<code>" not in line and "</code>" not in line])
             snippets.append(snippet)
+
     return snippets
 
 
