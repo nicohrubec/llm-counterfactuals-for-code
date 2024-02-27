@@ -28,9 +28,6 @@ if __name__ == '__main__':
     clone_single_shot_multi_counterfactual_generator = OneShotCounterfactual(gpt_explainer, clone_blackbox_str)
     clone_reflective_multi_counterfactual_generator = ReflectiveCounterfactual(gpt_explainer, clone_blackbox_str)
 
-    gpt_cot_explainer = CoTGPTCloneExplainer(model_str)
-    clone_single_shot_cot_counterfactual_generator = OneShotCounterfactual(gpt_cot_explainer, clone_blackbox_str)
-
     line_parser = LineParser()
     gpt_explainer = MaskedGPTDefectExplainer(model_str)
     defect_multi_shot_counterfactual_generator = MultiShotCounterfactual(gpt_explainer, defect_blackbox_str, line_parser)
@@ -43,9 +40,6 @@ if __name__ == '__main__':
     defect_single_shot_multi_counterfactual_generator = OneShotCounterfactual(gpt_explainer, defect_blackbox_str)
     defect_reflective_multi_counterfactual_generator = ReflectiveCounterfactual(gpt_explainer, defect_blackbox_str)
 
-    gpt_cot_explainer = CoTGPTDefectExplainer(model_str)
-    defect_single_shot_cot_counterfactual_generator = OneShotCounterfactual(gpt_cot_explainer, defect_blackbox_str)
-
     print("Clone Multi shot results: ")
     CloneExperimentRunner(clone_multi_shot_counterfactual_generator).run_experiment(n_samples=1)
     print()
@@ -54,9 +48,6 @@ if __name__ == '__main__':
     print()
     print("Clone One shot N=3 results: ")
     CloneExperimentRunner(clone_single_shot_multi_counterfactual_generator).run_experiment(n_samples=1)
-    print()
-    print("Clone Cot results:")
-    CloneExperimentRunner(clone_single_shot_cot_counterfactual_generator).run_experiment(n_samples=1)
     print()
     print("Defect Multi shot results: ")
     DefectExperimentRunner(defect_multi_shot_counterfactual_generator).run_experiment(n_samples=1)
@@ -67,8 +58,6 @@ if __name__ == '__main__':
     print("Defect One shot N=3 results: ")
     DefectExperimentRunner(defect_single_shot_multi_counterfactual_generator).run_experiment(n_samples=1)
     print()
-    print("Defect Cot results:")
-    DefectExperimentRunner(defect_single_shot_cot_counterfactual_generator).run_experiment(n_samples=1)
     print("Defect Reflection N=1 results: ")
     DefectExperimentRunner(defect_reflective_counterfactual_generator).run_experiment(n_samples=1)
     print()

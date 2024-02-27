@@ -3,9 +3,10 @@ from typing import List, Tuple
 from helpers import extract_all_code_from_string, remove_comments, is_equal_for_programs
 from prompt import build_defect_explainer_prompt
 from DeepSeekExplainer import DeepSeekExplainer
+from SimpleExplainer import SimpleExplainer
 
 
-class SimpleDeepSeekDefectExplainer(DeepSeekExplainer):
+class SimpleDeepSeekDefectExplainer(SimpleExplainer, DeepSeekExplainer):
     def __init__(self, num_counterfactuals=1):
         super().__init__()
         self.num_counterfactuals = num_counterfactuals

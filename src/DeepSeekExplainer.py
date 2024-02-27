@@ -1,11 +1,10 @@
-import os
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
-from Explainer import Explainer
+from params import ModelParams as mp
 
 
-class DeepSeekExplainer(Explainer):
+class DeepSeekExplainer:
     def __init__(self):
         self.tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/deepseek-coder-7b-instruct-v1.5",
                                                        trust_remote_code=True)
@@ -23,10 +22,10 @@ class DeepSeekExplainer(Explainer):
         outputs = self.model.generate(inputs,
                                       max_new_tokens=3000,
                                       do_sample=True,
-                                      top_k=self.top_k,
-                                      temperature=self.temperature,
-                                      top_p=self.top_p,
-                                      repetition_penalty=self.repetition_penalty,
+                                      top_k=mp.top_k,
+                                      temperature=mp.temperature,
+                                      top_p=mp.top_p,
+                                      repetition_penalty=mp.repetition_penalty,
                                       num_return_sequences=1,
                                       eos_token_id=self.tokenizer.eos_token_id,
                                       pad_token_id=self.tokenizer.pad_token_id)

@@ -2,7 +2,7 @@ import heapq
 from typing import Tuple
 from Levenshtein import distance
 
-from Explainer import Explainer
+from MaskedExplainer import MaskedExplainer
 from Parser import Parser
 from CounterfactualGenerator import CounterfactualGenerator
 from WrongPredictionError import WrongPredictionError
@@ -13,7 +13,7 @@ class MultiShotCounterfactual(CounterfactualGenerator):
     one_shot_flipped = 0
     num_candidates_produced = 0
 
-    def __init__(self, explainer: Explainer, blackbox_name: str, parser: Parser):
+    def __init__(self, explainer: MaskedExplainer, blackbox_name: str, parser: Parser):
         super().__init__(explainer, blackbox_name)
         self.parser = parser
 
@@ -51,8 +51,9 @@ class MultiShotCounterfactual(CounterfactualGenerator):
             if idx == 0 or len(line.strip()) == 1:
                 continue
 
+            original_line = parsed_sample[idx]
             masked_program = self.get_masked_program(parsed_sample.copy(), idx)
-            potential_counterfactual = self.explainer.explain(masked_program, original_label)[0]
+            potential_counterfactual = self.explainer.explain(masked_program, original_label, original_line)[0]
             unmasked_program = self.unmask_program(masked_program, potential_counterfactual)
             counterfactual_label, counterfactual_score = self.blackbox(unmasked_program)
 

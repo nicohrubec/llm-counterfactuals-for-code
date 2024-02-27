@@ -1,13 +1,14 @@
-from typing import List, Tuple
+from typing import List
 
 from helpers import extract_code_from_string, remove_comments
 from prompt import build_clone_masked_prompt
 from GPTExplainer import GPTExplainer
+from MaskedExplainer import MaskedExplainer
 
 
-class MaskedGPTCloneExplainer(GPTExplainer):
-    def explain(self, sample: str, prediction: bool, previous_solutions: List[Tuple[str, float]] = None) -> List[str]:
-        prompt = build_clone_masked_prompt(sample, prediction)
+class MaskedGPTCloneExplainer(MaskedExplainer, GPTExplainer):
+    def explain(self, sample: str, prediction: bool, original_line: str) -> List[str]:
+        prompt = build_clone_masked_prompt(sample, prediction, original_line)
         response = self.ask_gpt(prompt)
 
         try:

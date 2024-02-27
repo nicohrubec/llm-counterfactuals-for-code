@@ -1,10 +1,10 @@
 import torch
 from transformers import pipeline, AutoTokenizer
 
-from Explainer import Explainer
+from params import ModelParams as mp
 
 
-class GemmaExplainer(Explainer):
+class GemmaExplainer:
     def __init__(self):
         model_str = "google/gemma-7b-it"
         self.tokenizer = AutoTokenizer.from_pretrained(model_str)
@@ -29,10 +29,10 @@ class GemmaExplainer(Explainer):
             max_new_tokens=3000,
             add_special_tokens=True,
             do_sample=True,
-            temperature=self.temperature,
-            top_k=self.top_k,
-            top_p=self.top_p,
-            repetition_penalty=self.repetition_penalty
+            temperature=mp.temperature,
+            top_k=mp.top_k,
+            top_p=mp.top_p,
+            repetition_penalty=mp.repetition_penalty
         )
 
         return outputs[0]["generated_text"][len(prompt):]

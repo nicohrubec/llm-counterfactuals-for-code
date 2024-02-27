@@ -1,17 +1,17 @@
 from openai import OpenAI
 import json
 
-from Explainer import Explainer
+from params import ModelParams as mp
 
 
-class GPTExplainer(Explainer):
+class GPTExplainer:
     def __init__(self, model_str):
         self.model = model_str
         self.client = OpenAI()
 
     def ask_gpt(self, prompt):
         messages = [
-            {"role": "system", "content": self.system_prompt}
+            {"role": "system", "content": mp.system_prompt}
         ]
 
         if isinstance(prompt, str):  # simple input prompt string
@@ -23,9 +23,9 @@ class GPTExplainer(Explainer):
 
         completion = self.client.chat.completions.create(
             model=self.model,
-            temperature=self.temperature,
-            frequency_penalty=self.repetition_penalty,
-            top_p=self.top_p,
+            temperature=mp.temperature,
+            frequency_penalty=mp.repetition_penalty,
+            top_p=mp.top_p,
             messages=messages
         )
 

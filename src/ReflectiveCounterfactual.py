@@ -5,11 +5,11 @@ from collections import defaultdict
 
 from CounterfactualGenerator import CounterfactualGenerator
 from WrongPredictionError import WrongPredictionError
-from Explainer import Explainer
+from SimpleExplainer import SimpleExplainer
 
 
 class ReflectiveCounterfactual(CounterfactualGenerator):
-    def __init__(self, explainer: Explainer, blackbox_name: str, max_iterations=5):
+    def __init__(self, explainer: SimpleExplainer, blackbox_name: str, max_iterations=5):
         super().__init__(explainer, blackbox_name)
         self.max_iterations = max_iterations
         self.counterfactual_iteration = defaultdict(int)

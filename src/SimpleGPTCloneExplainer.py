@@ -3,9 +3,10 @@ from typing import List, Tuple
 from helpers import extract_all_code_from_string, remove_comments, is_equal_for_programs
 from prompt import build_clone_explainer_prompt
 from GPTExplainer import GPTExplainer
+from SimpleExplainer import SimpleExplainer
 
 
-class SimpleGPTCloneExplainer(GPTExplainer):
+class SimpleGPTCloneExplainer(SimpleExplainer, GPTExplainer):
     def __init__(self, model_str, num_counterfactuals=1):
         super().__init__(model_str)
         self.num_counterfactuals = num_counterfactuals

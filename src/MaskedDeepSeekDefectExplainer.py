@@ -1,13 +1,14 @@
-from typing import List, Tuple
+from typing import List
 
 from helpers import extract_code_from_string, remove_comments
 from prompt import build_defect_masked_prompt
 from DeepSeekExplainer import DeepSeekExplainer
+from MaskedExplainer import MaskedExplainer
 
 
-class MaskedDeepSeekDefectExplainer(DeepSeekExplainer):
-    def explain(self, sample: str, prediction: bool, previous_solutions: List[Tuple[str, int]] = None) -> List[str]:
-        prompt = build_defect_masked_prompt(sample, prediction)
+class MaskedDeepSeekDefectExplainer(MaskedExplainer, DeepSeekExplainer):
+    def explain(self, sample: str, prediction: bool, original_line: str) -> List[str]:
+        prompt = build_defect_masked_prompt(sample, prediction, original_line)
         response = self.ask_deepseek(prompt)
 
         try:
