@@ -1,6 +1,7 @@
 from typing import Tuple
 from Levenshtein import distance
 import heapq
+from collections import defaultdict
 
 from CounterfactualGenerator import CounterfactualGenerator
 from WrongPredictionError import WrongPredictionError
@@ -11,6 +12,10 @@ class ReflectiveCounterfactual(CounterfactualGenerator):
     def __init__(self, explainer: Explainer, blackbox_name: str, max_iterations=5):
         super().__init__(explainer, blackbox_name)
         self.max_iterations = max_iterations
+        self.counterfactual_iteration = defaultdict(int)
+
+    def get_counterfactual_iteration(self):
+        return self.counterfactual_iteration
 
     def get_counterfactual(self, sample, target) -> Tuple[str, bool, float, int]:
         previous_solutions = list()
@@ -44,6 +49,8 @@ class ReflectiveCounterfactual(CounterfactualGenerator):
                         token_distance, counterfactual_label, counterfactual_score, candidate_counterfactual, \
                             similarity_score = heapq.heappop(counterfactual_scores)
                     print(f"Counterfactual found in iteration {i}!")
+                    self.counterfactual_iteration[str(i)] += 1
+
                     break
                 else:  # no counterfactual found, return minimal token distance sample
                     token_distance, counterfactual_label, counterfactual_score, candidate_counterfactual, similarity_score, = \

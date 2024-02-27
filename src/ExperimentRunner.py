@@ -70,6 +70,12 @@ class ExperimentRunner:
         except AttributeError:
             pass
 
+        try:
+            print("Experiment found counterfactuals in iteration: ",
+                  self.counterfactual_generator.get_counterfactual_iteration())
+        except AttributeError:
+            pass
+
     def run_experiment(self, n_samples=30, max_num_lines=25):
         dataset = self.get_dataset(n_samples * 10, max_num_lines)
 
