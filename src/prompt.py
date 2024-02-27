@@ -23,7 +23,6 @@ For your proposed counterfactuals, favor removing or modifying existing lines ov
 detailed_instructions_multi_shot = """
 Enclose the suggested code line with the counterfactual in <code> tags. 
 Do not explain your reasoning. Only return the code.
-Align the suggested code line properly based on the surrounding code to ensure nice formatting.
 """
 
 

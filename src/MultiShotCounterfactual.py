@@ -25,7 +25,9 @@ class MultiShotCounterfactual(CounterfactualGenerator):
         return program.replace(self.line_mask, replacement)
 
     def replace_line(self, program, replacement, idx):
-        program[idx] = replacement
+        original_line = program[idx]
+        leading_whitespace = len(original_line) - len(original_line.lstrip())
+        program[idx] = " " * leading_whitespace + replacement
         return "\n".join(program)
 
     def get_one_shot_flip_ratio(self):
@@ -77,7 +79,9 @@ class MultiShotCounterfactual(CounterfactualGenerator):
 
             # check if last step has brought us closer to a solution
             if counterfactual_score < prev_counterfactual_score:
-                parsed_counterfactual_program[idx] = potential_counterfactual
+                parsed_counterfactual_program = self.replace_line(parsed_counterfactual_program,
+                                                                  potential_counterfactual, idx)
+                parsed_counterfactual_program = parsed_counterfactual_program.split("\n")
             else:
                 counterfactual_score = prev_counterfactual_score
 

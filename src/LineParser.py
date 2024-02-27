@@ -10,9 +10,7 @@ class LineParser(Parser):
     """
     def parse(self, program: str) -> List[str]:
         program = program.split("\n")
-        program = "\n\n".join([line for line in program if len(line.strip()) > 0])
-
-        return program.split("\n")
+        return [line for line in program if len(line.strip()) > 0]
 
     def unparse(self, split_program: List[str]) -> str:
         return "\n".join(split_program)
