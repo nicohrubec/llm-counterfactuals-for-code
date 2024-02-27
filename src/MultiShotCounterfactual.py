@@ -100,14 +100,7 @@ class MultiShotCounterfactual(CounterfactualGenerator):
         similarity_score = float(self.similarity_score(sample, proposed_counterfactual)[0][0])
         token_distance = distance(sample, proposed_counterfactual)
 
-        print(f"The correct label is: {target}")
-        print(
-            f"Originally the model predicted {original_label} with a confidence of {original_score}.")
-        print(
-            f"After applying the counterfactual the model predicted {counterfactual_label} "
-            f"with a confidence of {counterfactual_score}.")
-        print(f"Similarity score: {similarity_score:.{4}f}")
-        print(f"Token distance: {token_distance}")
-        print(f"Original sample:\n{sample}\n\nProposed counterfactual:\n{proposed_counterfactual}")
-        print()
+        self.print_results(proposed_counterfactual, counterfactual_label, counterfactual_score, original_label,
+                           original_score, sample, similarity_score, target, token_distance)
+
         return proposed_counterfactual, similarity_score, token_distance
