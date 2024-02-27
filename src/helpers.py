@@ -45,6 +45,9 @@ def extract_all_code_from_string(output: str) -> List[str]:
 def remove_comments(program: str) -> str:
     lines = []
     for line in program.split('\n'):
+        if "/*" in line and "*/" in line:
+            continue
+
         # Split the line on the first occurrence of "//"
         line_without_comment, _, _ = line.partition('//')
         lines.append(line_without_comment)
