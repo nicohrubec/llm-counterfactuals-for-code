@@ -43,6 +43,11 @@ class ReflectiveCounterfactual(CounterfactualGenerator):
                                                        candidate_counterfactual, similarity_score))
 
             counterfactual_label = original_label
+            token_distance = 0
+            similarity_score = 1.0
+            counterfactual_score = original_score
+            candidate_counterfactual = sample
+
             if candidate_counterfactuals:
                 if counterfactual_found:  # find counterfactual with minimal token distance to original sample
                     while counterfactual_label == original_label:
@@ -52,9 +57,11 @@ class ReflectiveCounterfactual(CounterfactualGenerator):
                     self.counterfactual_iteration[str(i)] += 1
 
                     break
-                else:  # no counterfactual found, return minimal token distance sample
-                    token_distance, counterfactual_label, counterfactual_score, candidate_counterfactual, similarity_score, = \
-                        heapq.heappop(counterfactual_scores)
+                else:  # no counterfactual found, return minimal token distance sample that is not the original sample
+                    while candidate_counterfactuals and token_distance == 0:
+                        token_distance, counterfactual_label, counterfactual_score, candidate_counterfactual, \
+                            similarity_score, = heapq.heappop(counterfactual_scores)
+
                     previous_solutions.append((original_score - counterfactual_score, candidate_counterfactual))
 
         self.print_results(candidate_counterfactual, counterfactual_label, counterfactual_score, original_label,
