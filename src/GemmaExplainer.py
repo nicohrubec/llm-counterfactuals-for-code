@@ -15,7 +15,8 @@ class GemmaExplainer:
             "text-generation",
             model=model_str,
             model_kwargs={"torch_dtype": torch.bfloat16},
-            device="cuda"
+            device="cuda",
+            tokenizer=self.tokenizer
         )
 
     def ask_gemma(self, prompt):
