@@ -19,10 +19,12 @@ Enclose the code with the counterfactual in <code> tags.
 For each counterfactual you propose, return the full original code with your proposed alteration embedded in it.
 As mentioned the change should be minimal and therefore not affect more than 5 lines of the original code.
 For your proposed counterfactuals, favor removing or modifying existing lines over inserting new code into the program.
+Do not insert code comments.
 """
 detailed_instructions_multi_shot = """
 Enclose the suggested code line with the counterfactual in <code> tags. 
 Do not explain your reasoning. Only return the code.
+Do not insert code comments.
 """
 
 
