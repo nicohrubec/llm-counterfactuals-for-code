@@ -1,7 +1,5 @@
 from SimpleGPTDefectExplainer import SimpleGPTDefectExplainer
 from SimpleGPTCloneExplainer import SimpleGPTCloneExplainer
-from CoTGPTDefectExplainer import CoTGPTDefectExplainer
-from CoTGPTCloneExplainer import CoTGPTCloneExplainer
 from OneShotCounterfactual import OneShotCounterfactual
 from MultiShotCounterfactual import MultiShotCounterfactual
 from ReflectiveCounterfactual import ReflectiveCounterfactual
