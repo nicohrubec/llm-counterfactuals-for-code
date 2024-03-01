@@ -13,9 +13,16 @@ class ReflectiveCounterfactual(CounterfactualGenerator):
         super().__init__(explainer, blackbox_name)
         self.max_iterations = max_iterations
         self.counterfactual_iteration = defaultdict(int)
+        self.counterfactual_token_distance_iteration = defaultdict(int)
 
     def get_counterfactual_iteration(self):
         return self.counterfactual_iteration
+
+    def get_counterfactual_iteration_token_distance(self):
+        counterfactual_iter = self.counterfactual_iteration
+        counterfactual_token_dist_iter = self.counterfactual_token_distance_iteration
+
+        return {k: counterfactual_token_dist_iter[k] / counterfactual_iter[k] for k in counterfactual_iter}
 
     def get_counterfactual(self, sample, target) -> Tuple[str, bool, float, int]:
         previous_solutions = list()
@@ -55,6 +62,7 @@ class ReflectiveCounterfactual(CounterfactualGenerator):
                             similarity_score = heapq.heappop(counterfactual_scores)
                     print(f"Counterfactual found in iteration {i}!")
                     self.counterfactual_iteration[str(i)] += 1
+                    self.counterfactual_token_distance_iteration[str(i)] += token_distance
 
                     break
                 else:  # no counterfactual found, return minimal token distance sample that is not the original sample

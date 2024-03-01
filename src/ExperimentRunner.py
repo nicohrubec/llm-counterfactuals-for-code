@@ -73,6 +73,8 @@ class ExperimentRunner:
         try:
             print("Experiment found counterfactuals in iteration: ",
                   self.counterfactual_generator.get_counterfactual_iteration())
+            print("Experiment found counterfactuals in iteration token distance: ",
+                  self.counterfactual_generator.get_counterfactual_iteration_token_distance())
         except AttributeError:
             pass
 
