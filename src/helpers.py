@@ -53,6 +53,10 @@ def remove_comments(program: str) -> str:
         lines.append(line_without_comment)
 
     lines = '\n'.join(lines)
+
+    multiline_pattern = re.compile(r"/\*.*?\*/", re.DOTALL)
+    lines = re.sub(multiline_pattern, "", lines)
+
     return remove_empty_lines(lines)
 
 
