@@ -1,6 +1,6 @@
 from CounterfactualGenerator import CounterfactualGenerator
 from WrongPredictionError import WrongPredictionError
-from helpers import remove_empty_lines
+from helpers import remove_empty_lines, remove_comments
 
 import traceback
 
@@ -95,6 +95,7 @@ class ExperimentRunner:
                 print("Iteration ", samples_done + 1)
                 sample, target = self.get_sample(dataset, idx=idx)
                 sample = remove_empty_lines(sample)
+                sample = remove_comments(sample)
 
                 counterfactual, flipped, similarity, token_distance = \
                     self.counterfactual_generator.get_counterfactual(sample, target)
