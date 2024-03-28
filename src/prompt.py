@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
-clone_task = "Code Defect Detection on the Devign dataset"
-defect_task = "Code Clone Detection on the Big Clone Bench dataset"
+clone_task = "Code Clone Detection on the Big Clone Bench dataset"
+defect_task = "Code Vulnerability Detection on the Devign dataset"
 clone_label_explanation = "The label 'True' means that the functions are clones, so you need to change the semantics in such a way that the functions are not clones anymore." \
                           "The label 'False' means that the functions are not clones, so you need to change the semantics of one of the functions such that it is a clone of the other."
 defect_label_explanation = "The label 'True' means that one or multiple Defects were detected, so you need to remove all Defects to flip the label to 'False'." \
@@ -9,7 +9,7 @@ defect_label_explanation = "The label 'True' means that one or multiple Defects 
 clone_definition = """Use the following definition of 'Code Clone Detection':
 "The objective is to identify whether two functions are semantically the same. If two functions are semantically equal, they are called Code Clones."
 """
-defect_definition = """Use the following definition of 'Code Defect Detection':
+defect_definition = """Use the following definition of 'Code Vulnerability Detection':
 "The objective is to identify whether a body of source code contains defects that may be used to attack software systems, such as resource leaks, use-after-free vulnerabilities, and DoS attack."
 """
 counterfactual_definition = """Use the following definition of 'counterfactual explanation':
