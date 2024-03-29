@@ -26,57 +26,64 @@ class ExperimentRunner:
         counterfactual_times = [t for idx, t in enumerate(times) if flippeds[idx]]
         # report results
         try:
-            print("Experiment label flip score: ", sum(flippeds) / len(flippeds))
+            label_flip_score = sum(flippeds) / len(flippeds)
+            print(f"Experiment label flip score: {label_flip_score:.{2}f}")
 
             if len(true_labels_flipped) > 0:
-                print("Experiment label flip score for true labels: ",
-                      sum(true_labels_flipped) / len(true_labels_flipped))
+                true_label_flip_score = sum(true_labels_flipped) / len(true_labels_flipped)
+                print(f"Experiment label flip score for true labels: {true_label_flip_score:.{2}f}")
                 print("Number of True labels encountered: ", len(true_labels_flipped))
             else:
                 print("No true labels were evaluated in this experiment!")
 
             if len(false_labels_flipped) > 0:
-                print("Experiment label flip score for false labels: ",
-                      sum(false_labels_flipped) / len(false_labels_flipped))
+                false_label_flip_score = sum(false_labels_flipped) / len(false_labels_flipped)
+                print(f"Experiment label flip score for false labels: {false_label_flip_score:.{2}f}")
                 print("Number of False labels encountered: ", len(false_labels_flipped))
             else:
                 print("No false labels were evaluated in this experiment!")
 
             if len(similarities) > 0:
-                print("Experiment similarity score: ", sum(similarities) / len(similarities))
+                similarity_score = sum(similarities) / len(similarities)
+                print(f"Experiment similarity score: {similarity_score:.{4}f}")
             else:
                 print("No similarity score was reported!")
 
             if len(counterfactual_similarities) > 0:
-                print("Experiment counterfactual similarity score: ",
-                      sum(counterfactual_similarities) / len(counterfactual_similarities))
+                counterfactual_similarity_score = sum(counterfactual_similarities) / len(counterfactual_similarities)
+                print(f"Experiment counterfactual similarity score: {counterfactual_similarity_score:.{4}f}")
             else:
                 print("No counterfactuals were found in this experiment!")
 
             if len(token_distances) > 0:
-                print("Experiment token distance: ", sum(token_distances) / len(token_distances))
+                avg_token_distance = sum(token_distances) / len(token_distances)
+                print("Experiment token distance: ", avg_token_distance)
             else:
                 print("No token distance was reported!")
 
             if len(counterfactual_distances) > 0:
-                print("Experiment counterfactual token distance: ",
-                      sum(counterfactual_distances) / len(counterfactual_distances))
+                avg_counterfactual_token_distance = sum(counterfactual_distances) / len(counterfactual_distances)
+                print("Experiment counterfactual token distance: ", avg_counterfactual_token_distance)
 
             print("Blackbox Accuracy: ", 1 - num_mispredictions / idx)
 
             if len(times) > 0:
-                print("Experiment avg runtime: ", sum(times) / len(times))
+                avg_runtime_in_s = sum(times) / len(times)
+                print(f"Experiment avg runtime: {avg_runtime_in_s:.{2}f}")
 
                 if len(times) > 1:
-                    print("Experiment std runtime: ", stdev(times))
+                    std_runtime_in_s = stdev(times)
+                    print(f"Experiment std runtime: {std_runtime_in_s:.{2}f}")
             else:
                 print("No runtime was reported!")
 
             if len(counterfactual_times) > 0:
-                print("Experiment avg counterfactual runtime: ", sum(counterfactual_times) / len(counterfactual_times))
+                avg_counterfactual_runtime_in_s = sum(counterfactual_times) / len(counterfactual_times)
+                print(f"Experiment avg counterfactual runtime: {avg_counterfactual_runtime_in_s:.{2}f}")
 
                 if len(counterfactual_times) > 1:
-                    print("Experiment std counterfactual runtime: ", stdev(times))
+                    std_counterfactual_runtime_in_s = stdev(counterfactual_times)
+                    print(f"Experiment std counterfactual runtime: {std_counterfactual_runtime_in_s:.{2}f}")
 
         except ZeroDivisionError:
             print("No results available, all samples failed!")
@@ -84,7 +91,8 @@ class ExperimentRunner:
         # MultiShotCounterfactual generator
         # TODO: should be moved but not sure yet where to
         try:
-            print("Experiment one shot flip score: ", self.counterfactual_generator.get_one_shot_flip_ratio())
+            one_shot_flip_score = self.counterfactual_generator.get_one_shot_flip_ratio()
+            print(f"Experiment one shot flip score: {one_shot_flip_score:.{2}f}", )
         except AttributeError:
             pass
 
@@ -131,7 +139,7 @@ class ExperimentRunner:
                 # get and report runtime
                 runtime_in_s = end_time - start_time
                 times.append(runtime_in_s)
-                print(f"Runtime in s: {runtime_in_s}")
+                print(f"Runtime in s: {runtime_in_s:.{2}f}")
                 print()
 
                 samples_done += 1
