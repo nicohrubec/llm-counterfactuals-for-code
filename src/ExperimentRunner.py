@@ -3,6 +3,8 @@ from WrongPredictionError import WrongPredictionError
 from helpers import remove_empty_lines, remove_comments
 
 import traceback
+from time import perf_counter
+from statistics import stdev
 
 
 class ExperimentRunner:
@@ -15,12 +17,13 @@ class ExperimentRunner:
     def get_sample(self, dataset, idx):
         raise NotImplementedError
 
-    def report_results(self, flippeds, idx, num_mispredictions, similarities, token_distances, targets):
+    def report_results(self, flippeds, idx, num_mispredictions, similarities, token_distances, targets, times):
         similarities = [v for v in similarities if v is not None]
         counterfactual_similarities = [v for idx, v in enumerate(similarities) if flippeds[idx]]
         counterfactual_distances = [v for idx, v in enumerate(token_distances) if flippeds[idx]]
         true_labels_flipped = [flipped for idx, flipped in enumerate(flippeds) if targets[idx]]
         false_labels_flipped = [flipped for idx, flipped in enumerate(flippeds) if not targets[idx]]
+        counterfactual_times = [t for idx, t in enumerate(times) if flippeds[idx]]
         # report results
         try:
             print("Experiment label flip score: ", sum(flippeds) / len(flippeds))
@@ -60,6 +63,21 @@ class ExperimentRunner:
                       sum(counterfactual_distances) / len(counterfactual_distances))
 
             print("Blackbox Accuracy: ", 1 - num_mispredictions / idx)
+
+            if len(times) > 0:
+                print("Experiment avg runtime: ", sum(times) / len(times))
+
+                if len(times) > 1:
+                    print("Experiment std runtime: ", stdev(times))
+            else:
+                print("No runtime was reported!")
+
+            if len(counterfactual_times) > 0:
+                print("Experiment avg counterfactual runtime: ", sum(counterfactual_times) / len(counterfactual_times))
+
+                if len(counterfactual_times) > 1:
+                    print("Experiment std counterfactual runtime: ", stdev(times))
+
         except ZeroDivisionError:
             print("No results available, all samples failed!")
         # very hacky but needed to print the one shot flip ratio after experiments which is only defined for the
@@ -86,6 +104,7 @@ class ExperimentRunner:
         similarities = []
         targets = []
         token_distances = []
+        times = []
         samples_done = 0
         idx = 0
         num_mispredictions = 0
@@ -97,8 +116,10 @@ class ExperimentRunner:
                 sample = remove_empty_lines(sample)
                 sample = remove_comments(sample)
 
+                start_time = perf_counter()
                 counterfactual, flipped, similarity, token_distance = \
                     self.counterfactual_generator.get_counterfactual(sample, target)
+                end_time = perf_counter()
 
                 # track results
                 counterfactuals.append(counterfactual)
@@ -106,6 +127,12 @@ class ExperimentRunner:
                 similarities.append(similarity)
                 token_distances.append(token_distance)
                 targets.append(target)
+
+                # get and report runtime
+                runtime_in_s = end_time - start_time
+                times.append(runtime_in_s)
+                print(f"Runtime in s: {runtime_in_s}")
+                print()
 
                 samples_done += 1
             except WrongPredictionError:
@@ -118,4 +145,4 @@ class ExperimentRunner:
 
             idx += 1
 
-        self.report_results(flippeds, idx, num_mispredictions, similarities, token_distances, targets)
+        self.report_results(flippeds, idx, num_mispredictions, similarities, token_distances, targets, times)
