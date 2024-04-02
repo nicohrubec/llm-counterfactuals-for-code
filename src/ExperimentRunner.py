@@ -104,7 +104,7 @@ class ExperimentRunner:
         except AttributeError:
             pass
 
-    def run_experiment(self, n_samples=100, max_num_lines=50):
+    def run_experiment(self, n_samples=250, max_num_lines=50):
         dataset = self.get_dataset(n_samples * 10, max_num_lines)
 
         counterfactuals = []
