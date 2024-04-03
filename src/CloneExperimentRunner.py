@@ -8,8 +8,7 @@ class CloneExperimentRunner(ExperimentRunner):
                            n_samples=n_samples, max_num_lines=max_num_lines, filter_col='func1')
 
     def get_sample(self, dataset, idx):
-        # random_sample = dataset.sample(random_state=2024)
-        sample = "<s>" "</s> \n\n <s>".join([dataset.iloc[idx].func1, dataset.iloc[idx].func2]) + "</s>"
+        sample = "\n\n\n".join([dataset.iloc[idx].func1, dataset.iloc[idx].func2])
         target = dataset.iloc[idx].label
 
         return sample, target
