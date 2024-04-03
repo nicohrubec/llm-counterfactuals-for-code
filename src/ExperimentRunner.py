@@ -105,7 +105,8 @@ class ExperimentRunner:
             pass
 
     def run_experiment(self, n_samples=250, max_num_lines=50):
-        dataset = self.get_dataset(n_samples * 10, max_num_lines)
+        # get more samples than we actually need in case of mispredictions
+        dataset = self.get_dataset(n_samples * 4, max_num_lines)
 
         counterfactuals = []
         flippeds = []
