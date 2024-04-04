@@ -5,8 +5,7 @@ from Parser import Parser
 
 class LineParser(Parser):
     """
-    Given a program as input this Parser splits it into a list of lines,
-    while guaranteeing that there is an empty line in between two lines of code.
+    Given a program as input this Parser splits it into a list of lines.
     """
     def parse(self, program: str) -> List[str]:
         program = program.split("\n")
