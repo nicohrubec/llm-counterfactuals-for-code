@@ -18,7 +18,13 @@ class BaselineCounterfactual(CounterfactualGenerator):
             counterfactual = counterfactual[0]
             similarity_score = float(self.similarity_score(sample, counterfactual)[0][0])
             token_distance = distance(sample, counterfactual)
+            counterfactual_label, counterfactual_score = self.blackbox(counterfactual)
+
+            self.print_results(counterfactual, counterfactual_label, counterfactual_score, original_label,
+                               original_score, sample, similarity_score, target, token_distance)
 
             return counterfactual, True, similarity_score, token_distance
 
+        print(f"Original sample:\n{sample}\n")
+        print("No counterfactual was found!")
         return "", False, 0.0, 0
