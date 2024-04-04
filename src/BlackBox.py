@@ -17,9 +17,15 @@ class BlackBox:
 
         t = AutoTokenizer.from_pretrained(model_str, use_fast=False)
         self.pipeline = pipeline(model=model_str, tokenizer=t, device=device)
+        self.cpu_pipeline = pipeline(model=model_str, tokenizer=t, device="cpu")
 
     def classify(self, document: str) -> Tuple[str, float]:
-        output = self.pipeline([document])
+        try:
+            output = self.pipeline([document])
+        except RuntimeError:
+            print("GPU inference failed! Switching to CPU for this sample.")
+            output = self.cpu_pipeline([document])
+
         return self.label2target[output[0]['label']], output[0]['score']
 
     def __call__(self, document: str) -> Tuple[str, float]:
