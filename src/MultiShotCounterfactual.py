@@ -38,7 +38,10 @@ class MultiShotCounterfactual(CounterfactualGenerator):
         self.num_candidates_produced += 1
 
     def get_counterfactual(self, sample, target) -> Tuple[str, bool, float, int]:
-        original_label, original_score = self.blackbox(sample)
+        try:
+            original_label, original_score = self.blackbox(sample)
+        except RuntimeError:
+            raise WrongPredictionError
 
         if original_label != target:
             raise WrongPredictionError
