@@ -5,6 +5,8 @@ from MultiShotCounterfactual import MultiShotCounterfactual
 from ReflectiveCounterfactual import ReflectiveCounterfactual
 from MaskedGPTDefectExplainer import MaskedGPTDefectExplainer
 from MaskedGPTCloneExplainer import MaskedGPTCloneExplainer
+from MaskedGPTDefectTokenExplainer import MaskedGPTDefectTokenExplainer
+from MaskedGPTCloneTokenExplainer import MaskedGPTCloneTokenExplainer
 from LineParser import LineParser
 from TokenParser import TokenParser
 from DefectExperimentRunner import DefectExperimentRunner
@@ -20,6 +22,7 @@ if __name__ == '__main__':
     gpt_explainer = MaskedGPTCloneExplainer(model_str)
     clone_multi_shot_line_counterfactual_generator = MultiShotCounterfactual(gpt_explainer, clone_blackbox_str,
                                                                              line_parser)
+    gpt_explainer = MaskedGPTCloneTokenExplainer(model_str)
     clone_multi_shot_token_counterfactual_generator = MultiShotCounterfactual(gpt_explainer, clone_blackbox_str,
                                                                               token_parser)
 
@@ -36,6 +39,7 @@ if __name__ == '__main__':
     gpt_explainer = MaskedGPTDefectExplainer(model_str)
     defect_multi_shot_line_counterfactual_generator = MultiShotCounterfactual(gpt_explainer, defect_blackbox_str,
                                                                               line_parser)
+    gpt_explainer = MaskedGPTDefectTokenExplainer(model_str)
     defect_multi_shot_token_counterfactual_generator = MultiShotCounterfactual(gpt_explainer, defect_blackbox_str,
                                                                                token_parser)
 

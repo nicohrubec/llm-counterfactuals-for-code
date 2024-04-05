@@ -6,7 +6,7 @@ from GPTExplainer import GPTExplainer
 from MaskedExplainer import MaskedExplainer
 
 
-class MaskedGPTDefectExplainer(MaskedExplainer, GPTExplainer):
+class MaskedGPTDefectTokenExplainer(MaskedExplainer, GPTExplainer):
     def explain(self, sample: str, prediction: bool, original_line: str) -> List[str]:
         prompt = build_defect_masked_token_prompt(sample, prediction, original_line)
         response = self.ask_gpt(prompt)
