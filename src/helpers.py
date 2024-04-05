@@ -1,6 +1,7 @@
 import re
 from typing import List
 import string
+import subprocess
 
 from datasets import load_dataset
 
@@ -76,3 +77,11 @@ def remove_empty_lines(input_string):
     non_empty_lines = filter(lambda x: x.strip(), lines)
     result_string = '\n'.join(non_empty_lines)
     return result_string
+
+
+def format_code(code):
+    command = ['clang-format', '-style=Google']
+    process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                               text=True)
+    formatted_code, error = process.communicate(code)
+    return formatted_code

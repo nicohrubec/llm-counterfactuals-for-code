@@ -1,15 +1,15 @@
 from typing import List
 
 from helpers import extract_code_from_string, remove_comments
-from prompt import build_clone_masked_line_prompt
-from DeepSeekExplainer import DeepSeekExplainer
+from prompt import build_clone_masked_token_prompt
+from GPTExplainer import GPTExplainer
 from MaskedExplainer import MaskedExplainer
 
 
-class MaskedDeepSeekCloneExplainer(MaskedExplainer, DeepSeekExplainer):
+class MaskedGPTCloneExplainer(MaskedExplainer, GPTExplainer):
     def explain(self, sample: str, prediction: bool, original_line: str) -> List[str]:
-        prompt = build_clone_masked_line_prompt(sample, prediction, original_line)
-        response = self.ask_deepseek(prompt)
+        prompt = build_clone_masked_token_prompt(sample, prediction, original_line)
+        response = self.ask_gpt(prompt)
 
         try:
             explanation = extract_code_from_string(response)

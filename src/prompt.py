@@ -81,7 +81,7 @@ def build_clone_explainer_prompt(sample, prediction: bool, n: int, previous_solu
     return prompt
 
 
-def build_defect_masked_prompt(sample, prediction: bool, original_line: str) -> str:
+def build_defect_masked_line_prompt(sample, prediction: bool, original_line: str) -> str:
     prompt = f"""
     In the task of {defect_task}, a trained black-box classifier predicted the label {prediction} for the following code.
     One line of the original program was masked using the <MASK> token. 
@@ -96,7 +96,22 @@ def build_defect_masked_prompt(sample, prediction: bool, original_line: str) -> 
     return prompt
 
 
-def build_clone_masked_prompt(sample, prediction: bool, original_line: str) -> str:
+def build_defect_masked_token_prompt(sample, prediction: bool, original_line: str) -> str:
+    prompt = f"""
+    In the task of {defect_task}, a trained black-box classifier predicted the label {prediction} for the following code.
+    One token of the original program was masked using the <MASK> token. 
+    Generate a single token counterfactual explanation by suggesting a replacement for the masked token that is syntactically and semantically coherent with the rest of the program, such that the label changes from {prediction} to {not prediction}.
+    {defect_label_explanation}
+
+    {defect_definition}\n\n{counterfactual_definition}\n\n{detailed_instructions_multi_shot}
+
+    \n—\nCode:\n{sample}\n\nOriginal token: {original_line}\n
+    """
+
+    return prompt
+
+
+def build_clone_masked_line_prompt(sample, prediction: bool, original_line: str) -> str:
     prompt = f"""
     In the task of {clone_task}, a trained black-box classifier predicted the label {prediction} for the following code containing two functions.
     One line of the original program was masked using the <MASK> token. 
@@ -106,6 +121,21 @@ def build_clone_masked_prompt(sample, prediction: bool, original_line: str) -> s
     {clone_definition}\n\n{counterfactual_definition}\n\n{detailed_instructions_multi_shot}
     
     \n—\nCode:\n{sample}\nOriginal line: {original_line}\n
+    """
+
+    return prompt
+
+
+def build_clone_masked_token_prompt(sample, prediction: bool, original_line: str) -> str:
+    prompt = f"""
+    In the task of {clone_task}, a trained black-box classifier predicted the label {prediction} for the following code containing two functions.
+    One token of the original program was masked using the <MASK> token. 
+    Generate a single token counterfactual explanation by suggesting a replacement for the masked token that is syntactically and semantically coherent with the rest of the program, such that the label changes from {prediction} to {not prediction}.
+    {clone_label_explanation}
+
+    {clone_definition}\n\n{counterfactual_definition}\n\n{detailed_instructions_multi_shot}
+
+    \n—\nCode:\n{sample}\nOriginal token: {original_line}\n
     """
 
     return prompt
