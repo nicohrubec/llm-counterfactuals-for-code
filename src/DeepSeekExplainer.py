@@ -6,9 +6,9 @@ from params import ModelParams as mp
 
 class DeepSeekExplainer:
     def __init__(self):
-        self.tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/deepseek-coder-7b-instruct-v1.5",
+        self.tokenizer = AutoTokenizer.from_pretrained("deepseek-ai/deepseek-coder-1.3b-instruct",
                                                        trust_remote_code=True)
-        self.model = AutoModelForCausalLM.from_pretrained("deepseek-ai/deepseek-coder-7b-instruct-v1.5",
+        self.model = AutoModelForCausalLM.from_pretrained("deepseek-ai/deepseek-coder-1.3b-instruct",
                                                           trust_remote_code=True, torch_dtype=torch.bfloat16).cuda()
 
     def ask_deepseek(self, prompt):
