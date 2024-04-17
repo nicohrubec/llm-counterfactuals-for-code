@@ -24,6 +24,14 @@ class ExperimentRunner:
         true_labels_flipped = [flipped for idx, flipped in enumerate(flippeds) if targets[idx]]
         false_labels_flipped = [flipped for idx, flipped in enumerate(flippeds) if not targets[idx]]
         counterfactual_times = [t for idx, t in enumerate(times) if flippeds[idx]]
+
+        # make results accessible outside of class
+        self.similarities = similarities
+        self.counterfactual_similarities = counterfactual_similarities
+        self.token_distances = token_distances
+        self.counterfactual_token_distances = counterfactual_distances
+        self.times = times
+
         # report results
         try:
             label_flip_score = sum(flippeds) / len(flippeds)
