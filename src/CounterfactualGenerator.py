@@ -4,6 +4,7 @@ from BlackBox import BlackBox
 from SimpleExplainer import SimpleExplainer
 from MaskedExplainer import MaskedExplainer
 from SimilarityMetric import SimilarityMetric
+from helpers import format_code
 
 
 class CounterfactualGenerator:
@@ -24,5 +25,5 @@ class CounterfactualGenerator:
             f"{counterfactual_score}.")
         print(f"Similarity score: {similarity_score:.{4}f}")
         print(f"Token distance: {token_distance}")
-        print(f"Original sample:\n{sample}\n\nProposed counterfactual:\n{candidate_counterfactual}")
+        print(f"Original sample:\n{sample}\n\nProposed counterfactual:\n{format_code(candidate_counterfactual)}")
         print()

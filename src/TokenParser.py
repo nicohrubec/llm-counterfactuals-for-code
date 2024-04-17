@@ -2,7 +2,6 @@ from typing import List
 import re
 
 from Parser import Parser
-from helpers import format_code
 
 
 class TokenParser(Parser):
@@ -16,4 +15,4 @@ class TokenParser(Parser):
 
     def unparse(self, tokens: List[str]) -> str:
         program = ' '.join(tokens)
-        return format_code(program)
+        return program
